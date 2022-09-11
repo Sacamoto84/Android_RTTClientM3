@@ -9,15 +9,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.rttclientm3.ui.theme.RTTClientM3Theme
 import libs.KeepScreenOn
 import libs.ipToBroadCast
@@ -27,10 +28,14 @@ var contex: Context? = null
 lateinit var shared: SharedPreferences
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         contex = applicationContext
+
+
+
 
         shared = getSharedPreferences("size", Context.MODE_PRIVATE)
         console_text.value = shared.getString("size", "12")?.toInt()?.sp ?: 12.sp
@@ -47,7 +52,7 @@ class MainActivity : ComponentActivity() {
         val vm: VM by viewModels()
         vm.launchUDPRecive()
 
-        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE)  as WifiManager
+        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val ipAddress: String = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
         print(ipAddress)
 
@@ -94,8 +99,7 @@ class MainActivity : ComponentActivity() {
                         colorText = Color(0),
                         colorBg = Color(0xFF0033CC),
                         flash = true
-                    )
-                    ,
+                    ),
                     pairTextAndColor(
                         text = ipAddress,
                         colorText = Color(0xFF2196F3),
@@ -112,11 +116,39 @@ class MainActivity : ComponentActivity() {
             KeepScreenOn()
             vm.launchUIChanelRecive()
 
+            val navController = rememberNavController()
+
             RTTClientM3Theme {
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
 
-                    lazy(colorline_and_text)
+                    BuildNavGraph(navController)
+
+
+                    val tabsTitle = listOf("Email", "Call", "Favorite")
+
+
+
+
+                    MediumTopAppBar(title = {
+
+                            Text(text = "1")
+                            Text(text = "2")
+                            Button(onClick = { /*TODO*/ }) {
+                                Text(text = "www")
+                            }
+
+
+                    },
+                    colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.Green)
+                    )
+
+
+                    //lazy(colorline_and_text)
+
 
                     //info()
 
@@ -136,18 +168,23 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
 
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    RTTClientM3Theme {
-        //Greeting("Android")
-        Button(onClick = { /*TODO*/ }) {
-            Text("sdsdsd")
+fun BuildNavGraph(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = "login"
+    ) {
+        composable(route = "login") {
+            //call LoginScreen composable function here
         }
+
+        composable(route = "home") {
+            //call HomeScreen composable function here
+        }
+
     }
 }
+
+
+

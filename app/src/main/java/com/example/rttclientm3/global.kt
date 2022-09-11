@@ -7,10 +7,15 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.compose.rememberNavController
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.ArrayList
+
+
+
+
 
 //Настройки программы, чекбоксы в окне
 
