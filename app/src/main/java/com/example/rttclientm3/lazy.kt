@@ -21,12 +21,14 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 
 var manual_recomposeLazy = mutableStateOf(0)
 
 @Composable
-fun lazy(messages: SnapshotStateList< lineTextAndColor >) {
+fun lazy(navController: NavController, messages: SnapshotStateList< lineTextAndColor >) {
 
     var update by remember { mutableStateOf(true) }  //для мигания
 
@@ -156,7 +158,7 @@ fun lazy(messages: SnapshotStateList< lineTextAndColor >) {
         }
 
         //Блок кнопок
-        bottomNavigationLazy()
+        bottomNavigationLazy(navController as NavHostController)
     }
 }
 

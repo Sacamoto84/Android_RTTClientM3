@@ -13,10 +13,6 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.ArrayList
 
-
-
-
-
 //Настройки программы, чекбоксы в окне
 
 //MARK: Показывать в конце строки символ энтер

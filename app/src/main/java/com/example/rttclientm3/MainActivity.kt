@@ -127,26 +127,6 @@ class MainActivity : ComponentActivity() {
 
                     BuildNavGraph(navController)
 
-
-                    val tabsTitle = listOf("Email", "Call", "Favorite")
-
-
-
-
-                    MediumTopAppBar(title = {
-
-                            Text(text = "1")
-                            Text(text = "2")
-                            Button(onClick = { /*TODO*/ }) {
-                                Text(text = "www")
-                            }
-
-
-                    },
-                    colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.Green)
-                    )
-
-
                     //lazy(colorline_and_text)
 
 
@@ -173,15 +153,20 @@ class MainActivity : ComponentActivity() {
 fun BuildNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = "login"
+        startDestination = "console"
     ) {
-        composable(route = "login") {
-            //call LoginScreen composable function here
+        composable(route = "console") {
+            lazy(navController, colorline_and_text)
         }
 
-        composable(route = "home") {
-            //call HomeScreen composable function here
+        composable(route = "info") {
+            info(navController)
         }
+
+        composable(route = "web") {
+            Web(navController)
+        }
+
 
     }
 }

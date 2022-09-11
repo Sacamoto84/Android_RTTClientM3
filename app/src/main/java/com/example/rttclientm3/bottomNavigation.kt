@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import libs.ipToBroadCast
 import libs.readIP
 import libs.sendUDP
@@ -19,7 +20,7 @@ private val heghtHabigation = 50.dp
 private val colorBg = Color(0xFF1B1B1B)
 
 @Composable
-fun bottomNavigationLazy() {
+fun bottomNavigationLazy(navController: NavHostController) {
     Box(
         Modifier
             .fillMaxWidth()
@@ -85,6 +86,10 @@ fun bottomNavigationLazy() {
                 .weight(1f)
                 .padding(top = 8.dp, bottom = 8.dp),
                 onClick = {
+
+                    navController.navigate("web")
+
+
                     val s =
                         sendUDP("Reset", ip = ipToBroadCast(readIP(contex = contex!!)), port = 8889)
                     if (s == "OK") {

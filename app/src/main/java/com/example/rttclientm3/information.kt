@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
 
 
 //MARK: Локальные дефайны
@@ -24,7 +25,7 @@ val boxSize = 32.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun info() {
+fun info(navController: NavController) {
 
     val scrollState = rememberScrollState()
 
@@ -289,39 +290,3 @@ fun info() {
     }
 }
 
-@Composable
-fun Web()
-
-{   val reload = remember { mutableStateOf(false) }
-
-    Column(Modifier.padding(10.dp).fillMaxSize())
-    {
-
-        Button(
-            onClick = { reload.value = true } ) {
-            Text(text = "Обновить портал")
-        }
-
-        if (isESPmDNSFinding)
-        {
-            AndroidView(
-                modifier = Modifier.background(Color.DarkGray).padding(10.dp),
-                factory = ::WebView,
-                update = { webView ->
-                    webView.webViewClient = WebViewClient()
-                    webView.loadUrl("http://$ipESP")
-                    if (reload.value)
-                    {
-                        reload.value = false
-                        println("Команда перегрузить")
-                        webView.reload()
-                    }
-                }
-            )
-
-        }
-
-    }
-
-
-}
