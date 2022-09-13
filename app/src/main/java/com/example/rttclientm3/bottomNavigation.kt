@@ -7,6 +7,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,7 +37,7 @@ fun bottomNavigationLazy(navController: NavHostController) {
         ) {
 
             //По кнопке включаем слежение
-            val slegenie = true //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!by telnetSlegenie.observeAsState()
+            val slegenie by telnetSlegenie.observeAsState()
 
             // Кнопка включения слежения
             Button(
@@ -46,7 +47,7 @@ fun bottomNavigationLazy(navController: NavHostController) {
                     .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
                     .weight(1f),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (slegenie) Color(0xFF8AAF4A) else Color.DarkGray
+                    containerColor = if (slegenie == true) Color(0xFF8AAF4A) else Color.DarkGray
                 ),
                 onClick = {
                     telnetSlegenie.value =
@@ -86,10 +87,6 @@ fun bottomNavigationLazy(navController: NavHostController) {
                 .weight(1f)
                 .padding(top = 8.dp, bottom = 8.dp),
                 onClick = {
-
-                    navController.navigate("web")
-
-
                     val s =
                         sendUDP("Reset", ip = ipToBroadCast(readIP(contex = contex!!)), port = 8889)
                     if (s == "OK") {

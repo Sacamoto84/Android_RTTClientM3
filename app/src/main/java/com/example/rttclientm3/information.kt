@@ -2,6 +2,7 @@ package com.example.rttclientm3
 
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Space
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -29,7 +30,11 @@ fun info(navController: NavController) {
 
     val scrollState = rememberScrollState()
 
-    Column(Modifier.fillMaxSize().background(Color(0xFF090909))) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(Color(0xFF090909))
+    ) {
 
         Column(
             Modifier
@@ -50,6 +55,8 @@ fun info(navController: NavController) {
             Text(text = """  \033[01;03;38;05;147;48;05;21m Текст \033[0m\n""", color = Color.White)
             Text(text = "  Порт 8888 | Очистка экрана \\033[1m ", color = Color.White)
 
+            Spacer(modifier = Modifier.height(5.dp))
+            
             //Рисуем таблицу
             Column(
                 Modifier
@@ -132,159 +139,131 @@ fun info(navController: NavController) {
                 }
             }
 
-            val buttonFontSize = 12.sp
-
-            Row(
+            Button(
                 modifier = Modifier
-                    .padding(top = 4.dp)
                     .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-
-                Button(colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
-                    onClick = {
-                        console_text.value = 12.sp
-                        consoleAdd("Изменение шрифта")
-                        shared.edit().putString("size", "12").apply()
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                )
-                {
-                    Text("12", fontSize = buttonFontSize, color = if(console_text.value == 12.sp) Color.LightGray else  Color.Black)
-                }
-
-                Button(colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
-                    onClick = {
-                        console_text.value = 14.sp
-                        consoleAdd("Изменение шрифта")
-                        shared.edit().putString("size", "14").apply()
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(start = 1.dp)
-                )
-                {
-                    Text("14", fontSize = buttonFontSize, color = if(console_text.value == 14.sp) Color.LightGray else  Color.Black)
-                }
-
-                Button(colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
-                    onClick = {
-                        console_text.value = 16.sp
-                        consoleAdd("Изменение шрифта")
-                        shared.edit().putString("size", "16").apply()
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(start = 1.dp)
-                )
-                {
-                    Text("16", fontSize = buttonFontSize, color = if(console_text.value == 16.sp) Color.LightGray else  Color.Black)
-                }
-
-                Button(colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
-                    onClick = {
-                        console_text.value = 18.sp
-                        consoleAdd("Изменение шрифта")
-                        shared.edit().putString("size", "18").apply()
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(start = 1.dp)
-                )
-                {
-                    Text("18", fontSize = buttonFontSize, color = if(console_text.value == 18.sp) Color.LightGray else  Color.Black)
-                }
-
-                Button(colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
-                    onClick = {
-                        console_text.value = 20.sp
-                        consoleAdd("Изменение шрифта")
-                        shared.edit().putString("size", "20").apply()
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(start = 1.dp)
-                )
-                {
-                    Text("20", fontSize = buttonFontSize, color = if(console_text.value == 20.sp) Color.LightGray else  Color.Black)
-                }
-
-                Button(colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
-                    onClick = {
-                        console_text.value = 22.sp
-                        consoleAdd("Изменение шрифта")
-                        shared.edit().putString("size", "22").apply()
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(start = 1.dp)
-                )
-                {
-                    Text("22", fontSize = buttonFontSize, color = if(console_text.value == 22.sp) Color.LightGray else  Color.Black)
-                }
-
-                Button(colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
-                    onClick = {
-                        console_text.value = 24.sp
-                        consoleAdd("Изменение шрифта")
-                        shared.edit().putString("size", "24").apply()
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(start = 1.dp)
-                )
-                {
-                    Text("24", fontSize = buttonFontSize, color = if(console_text.value == 24.sp) Color.LightGray else  Color.Black)
-                }
-
-                Button(colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
-                    onClick = {
-                        console_text.value = 26.sp
-                        consoleAdd("Изменение шрифта")
-                        shared.edit().putString("size", "26").apply()
-
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(start = 1.dp)
-                )
-                {
-                    Text("26", fontSize = buttonFontSize, color = if(console_text.value == 26.sp) Color.LightGray else  Color.Black)
-                }
+                    .padding(top = 10.dp),
+                onClick = { navController.navigate("web") }
+            )
+            {
+                Text("Открыть Портал", fontSize = 20.sp)
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically, modifier =  Modifier.padding(start = 20.dp)
-                //modifier = Modifier.background(Color.Red)
-            ) {
-
-
-                Checkbox(
-                    checked = isCheckedUseLiteralEnter.value,
-                    onCheckedChange = {
-                        isCheckedUseLiteralEnter.value = it
-                        shared.edit().putBoolean("enter", it).apply()
-                    },
-                    colors = CheckboxDefaults.colors(uncheckedColor = Color.LightGray)
-                )
-
-
-                Text(text = "Вывести символ \\n", color = Color.LightGray)
+            OutlinedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                colors = CardDefaults.outlinedCardColors(containerColor = Color.Gray)
+            )
+            {
+                Text(text = "IP адресс телефона $ipAddress", color = Color.White, modifier = Modifier.padding(start = 20.dp, top = 5.dp))
+                val str = if (ipESP[0]=='/') ipESP.removePrefix("/") else ipESP
+                Text(text = "IP адресс esp.local   $str", color = Color.White, modifier = Modifier.padding(start = 20.dp, bottom = 5.dp))
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically, modifier =  Modifier.padding(start = 20.dp)
-                //modifier = Modifier.background(Color.Red)
-            ) {
-                Checkbox(
-                    checked = isCheckedUselineVisible.value,
-                    onCheckedChange = {
-                        isCheckedUselineVisible.value = it
-                        shared.edit().putBoolean("lineVisible", it).apply()
-                    },
-                    colors = CheckboxDefaults.colors(uncheckedColor = Color.LightGray)
-                )
-                Text(text = "Вывести номер строки", color = Color.LightGray)
+            OutlinedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                colors = CardDefaults.outlinedCardColors(containerColor = Color.Gray)
+            )
+            {
+                Column()
+                {
+                    repeat(2)
+                    { y ->
+                        Row()
+                        {
+                            repeat(4)
+                            { x ->
+                                ElevatedButton(
+                                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 5.dp),
+                                    colors = ButtonDefaults.elevatedButtonColors(
+                                        containerColor =
+                                        if (console_text.value == (12 + x * 2 + y * 8).sp)
+                                            Color.LightGray else Color.DarkGray
+                                    ),
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(start = 2.5.dp, end = 2.5.dp),
+                                    onClick = {
+                                        val iii = 12 + x * 2 + y * 8
+                                        println("Изменение шрифта на $iii")
+                                        console_text.value = iii.sp
+                                        consoleAdd("Изменение шрифта")
+                                        shared.edit().putString("size", "$iii").apply()
+                                    }
+                                )
+                                {
+                                    val iii = 12 + x * 2 + y * 8
+                                    Text(
+                                        text = "$iii", color =
+                                        if (console_text.value == (12 + x * 2 + y * 8).sp) Color.Black
+                                        else Color.LightGray,
+                                        fontSize = 20.sp
+                                    )
+
+
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
+
+            val buttonFontSize = 4.sp
+
+
+            OutlinedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp, bottom = 100.dp),
+                colors = CardDefaults.outlinedCardColors(containerColor = Color.Gray)
+            )
+            {
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(start = 10.dp)
+                    //modifier = Modifier.background(Color.Red)
+                ) {
+
+
+                    Checkbox(
+                        checked = isCheckedUseLiteralEnter.value,
+                        onCheckedChange = {
+                            isCheckedUseLiteralEnter.value = it
+                            shared.edit().putBoolean("enter", it).apply()
+                        },
+                        colors = CheckboxDefaults.colors(uncheckedColor = Color.LightGray)
+                    )
+
+
+                    Text(text = "Вывести символ \\n", color = Color.White)
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(start = 10.dp)
+                    //modifier = Modifier.background(Color.Red)
+                ) {
+                    Checkbox(
+                        checked = isCheckedUselineVisible.value,
+                        onCheckedChange = {
+                            isCheckedUselineVisible.value = it
+                            shared.edit().putBoolean("lineVisible", it).apply()
+                        },
+                        colors = CheckboxDefaults.colors(uncheckedColor = Color.LightGray)
+                    )
+                    Text(text = "Вывести номер строки", color = Color.White)
+                }
+
+            }
+
+
+            Spacer(modifier = Modifier.width(50.dp))
+
 
         }
     }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,11 +30,8 @@ var manual_recomposeLazy = mutableStateOf(0)
 
 @Composable
 fun lazy(navController: NavController, messages: SnapshotStateList< lineTextAndColor >) {
-
     var update by remember { mutableStateOf(true) }  //для мигания
-
     //println("---lazy---")
-
     val lazyListState: LazyListState = rememberLazyListState()
 
     //println("Индекс первого видимого элемента = " + lazyListState.firstVisibleItemIndex.toString())
@@ -92,8 +90,6 @@ fun lazy(navController: NavController, messages: SnapshotStateList< lineTextAndC
 
                         val s = item.pairList.size
 
-
-
                         if ((s > 0)&&( isCheckedUselineVisible.value)) {
 
                             val str: String = when (index) {
@@ -144,8 +140,8 @@ fun lazy(navController: NavController, messages: SnapshotStateList< lineTextAndC
             )
             {
                 val image: Painter = painterResource(id = R.drawable.warn2)
-                val warning = true //??????????????????????????by telnetWarning.observeAsState()
-                if (warning) {
+                val warning by telnetWarning.observeAsState()
+                if (warning == true) {
                     Image(
                         painter = image,
                         contentDescription = "",

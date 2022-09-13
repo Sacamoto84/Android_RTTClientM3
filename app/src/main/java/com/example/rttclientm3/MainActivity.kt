@@ -1,18 +1,28 @@
 package com.example.rttclientm3
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.drawable.VectorDrawable
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.text.format.Formatter
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavHostController
@@ -20,6 +30,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.rttclientm3.ui.theme.RTTClientM3Theme
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import libs.KeepScreenOn
 import libs.ipToBroadCast
 import libs.readIP
@@ -27,15 +40,15 @@ import libs.readIP
 var contex: Context? = null
 lateinit var shared: SharedPreferences
 
+lateinit var ipAddress: String
+
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         contex = applicationContext
-
-
-
 
         shared = getSharedPreferences("size", Context.MODE_PRIVATE)
         console_text.value = shared.getString("size", "12")?.toInt()?.sp ?: 12.sp
@@ -53,7 +66,7 @@ class MainActivity : ComponentActivity() {
         vm.launchUDPRecive()
 
         val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        val ipAddress: String = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
+        ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
         print(ipAddress)
 
         //Нужно добавить ее в список лази как текущую
@@ -73,7 +86,7 @@ class MainActivity : ComponentActivity() {
                         colorBg = Color(0xFF587C2F),
                     ),
                     pairTextAndColor(
-                        text = " v23 ",
+                        text = " v24 ",
                         colorText = Color(0xFF00E2FF),
                         colorBg = Color(0xFF334292),
                     ),
@@ -100,61 +113,52 @@ class MainActivity : ComponentActivity() {
                         colorBg = Color(0xFF0033CC),
                         flash = true
                     ),
-                    pairTextAndColor(
-                        text = ipAddress,
-                        colorText = Color(0xFF2196F3),
-                        colorBg = Color(0xFF000000),
-                        flash = false
-                    )
                 )
             )
         )
         consoleAdd(" ") //Пустая строка
         setContent {
-
             ipBroadcast = ipToBroadCast(readIP(applicationContext))
             KeepScreenOn()
             vm.launchUIChanelRecive()
-
             val navController = rememberNavController()
-
             RTTClientM3Theme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
                     BuildNavGraph(navController)
-
-                    //lazy(colorline_and_text)
-
-
-                    //info()
-
-
-                    //HorizontalPager(count = 4, state = pagerState, itemSpacing = 0.dp) { page ->
-                    //    when (page) {
-                    //        0 -> lazy(colorline_and_text)
-                    //        1 -> info()
-                    //        2 -> info()
-                    //        3 -> Web()
-                    //    }
-                    // }
-
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun home(navController: NavHostController)
+{
+    val pagerState = rememberPagerState()
+    HorizontalPager(count = 2, state = pagerState, itemSpacing = 0.dp) { page ->
+        when (page) {
+            0 -> lazy(navController, colorline_and_text)
+            1 -> info(navController)
+        }
+    }
+}
 
 @Composable
 fun BuildNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = "console"
+        startDestination = "home"
     ) {
+
+        composable(route = "home") {
+            home(navController)
+        }
+
         composable(route = "console") {
             lazy(navController, colorline_and_text)
         }
@@ -166,7 +170,6 @@ fun BuildNavGraph(navController: NavHostController) {
         composable(route = "web") {
             Web(navController)
         }
-
 
     }
 }
