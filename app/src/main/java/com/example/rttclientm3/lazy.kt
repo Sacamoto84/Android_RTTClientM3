@@ -139,7 +139,7 @@ fun lazy(navController: NavController, messages: SnapshotStateList< lineTextAndC
                 contentAlignment = Alignment.BottomEnd
             )
             {
-                val image: Painter = painterResource(id = R.drawable.warn2)
+                val image: Painter = painterResource(id = R.drawable.error)
                 val warning by telnetWarning.observeAsState()
                 if (warning == true) {
                     Image(
