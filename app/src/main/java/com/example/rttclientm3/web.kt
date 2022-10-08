@@ -31,9 +31,9 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 
-fun ping(ip: String = "192.169.0.200"): Boolean {
+fun ping(ip: String = "http://192.168.0.200"): Boolean {
     try {
-        val url = URL("http://192.168.0.200")
+        val url = URL("${ip}")
         val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
         connection.setRequestProperty("Connection", "close")
         connection.connectTimeout = 1000
@@ -64,10 +64,14 @@ fun ping(ip: String = "192.169.0.200"): Boolean {
 fun Web(navController: NavController) {
 
     val reload = remember { mutableStateOf(false) }
-    val state = rememberWebViewState("http://$ipESP")
+
+    val ip = "http://"+ipESP.substring(ipESP.lastIndexOf('/') + 1)
+    val state = rememberWebViewState(ip)
+    println("URL $ip")
+
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val navigator = WebViewNavigator(coroutineScope)
-    val ping = remember { mutableStateOf(ping()) }
+    val ping = remember { mutableStateOf(ping(ip)) }
 
     val swipeRefreshState = rememberSwipeRefreshState(false)
 
@@ -76,7 +80,7 @@ fun Web(navController: NavController) {
         state = swipeRefreshState,
         onRefresh = {
             println("onRefresh")
-            ping.value = ping()
+            ping.value = ping(ip)
             navigator.reload()
         }
     ) {
@@ -88,17 +92,7 @@ fun Web(navController: NavController) {
                 .verticalScroll(rememberScrollState())
         )
         {
-           /*
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    ping.value = ping()
-                    navigator.reload()
-                })
-            {
-                Text(text = "Обновить портал")
-            }
-*/
+
             if (ping.value)
                 WebView(
                     modifier = Modifier
@@ -116,7 +110,7 @@ fun Web(navController: NavController) {
                     }
                 )
             else
-                Text(text = "Отсуствует связь с $ipESP")
+                Text(text = "Отсуствует связь с $ip")
 
         }
 

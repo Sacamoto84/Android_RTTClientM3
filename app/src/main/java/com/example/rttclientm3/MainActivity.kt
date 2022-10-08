@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
                         colorBg = Color(0xFF587C2F),
                     ),
                     pairTextAndColor(
-                        text = " v24 ",
+                        text = " v25 ",
                         colorText = Color(0xFF00E2FF),
                         colorBg = Color(0xFF334292),
                     ),

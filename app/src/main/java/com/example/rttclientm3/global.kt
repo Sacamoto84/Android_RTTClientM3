@@ -21,7 +21,6 @@ val isCheckedUseLiteralEnter = mutableStateOf(false)
 //MARK: Показывать номер строки
 val isCheckedUselineVisible = mutableStateOf(false)
 
-
 var console_text = mutableStateOf( 12.sp )
 
 var telnetSlegenie = MutableLiveData<Boolean>(true)
