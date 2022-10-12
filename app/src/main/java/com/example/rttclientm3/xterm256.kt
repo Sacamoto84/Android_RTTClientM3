@@ -66,7 +66,11 @@ fun stringcalculate(text: String): List<pairTextAndColor> {
             pairTextAndColor(
                 text = str,
                 colorText = currentTextColor,
-                colorBg = currentBgColor
+                colorBg = currentBgColor,
+                bold = currentTextBold,
+                italic = currentTextItalic,
+                underline = currentTextUnderline,
+                flash = currentTextFlash
             )
         )
         return listPair
@@ -124,6 +128,12 @@ fun calculateColorInEscString(str: String) {
     if (str == "0") {
         currentTextColor = defaultTextColor
         currentBgColor = defaultBgColor
+
+        currentTextBold = false
+        currentTextItalic = false
+        currentTextUnderline = false
+        currentTextFlash = false
+
         return
     }
 
@@ -161,11 +171,6 @@ fun calculateColorInEscString(str: String) {
     } catch (e: Exception) {
         Log.e("calculateColorInEsc", "Ошибка блока 1")
     }
-
-    currentTextBold = false
-    currentTextItalic = false
-    currentTextUnderline = false
-    currentTextFlash = false
 
     //MARK: Bold
     if (str1.indexOf("01") != -1) currentTextBold = true
