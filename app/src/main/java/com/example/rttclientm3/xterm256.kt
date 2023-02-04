@@ -3,8 +3,6 @@ package com.example.rttclientm3
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
-import java.net.DatagramPacket
-import java.net.DatagramSocket
 
 val allcolor = mutableListOf<Color>()
 

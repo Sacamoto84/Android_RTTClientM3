@@ -43,8 +43,8 @@ lateinit var shared: SharedPreferences
 lateinit var ipAddress: String
 
 class MainActivity : ComponentActivity() {
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         shared = getSharedPreferences("size", Context.MODE_PRIVATE)
         console_text.value = shared.getString("size", "12")?.toInt()?.sp ?: 12.sp
 
-        //MARK: Вывод символа эннтер
+        //MARK: Вывод символа энтер
         isCheckedUseLiteralEnter.value = shared.getBoolean("enter", false)
 
         //MARK: Вывод номера строки
@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
                         colorBg = Color(0xFF587C2F),
                     ),
                     pairTextAndColor(
-                        text = " v2.5.4 ",
+                        text = " v2.5.5 ",
                         colorText = Color(0xFF00E2FF),
                         colorBg = Color(0xFF334292),
                     ),

@@ -18,13 +18,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 
-
 //MARK: Локальные дефайны
 val textSize = 12.sp
 val fontWeight = FontWeight.Normal
 val boxSize = 32.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun info(navController: NavController) {
 
