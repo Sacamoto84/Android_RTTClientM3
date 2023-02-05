@@ -128,7 +128,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
                     BuildNavGraph(navController)
+
                 }
             }
         }
@@ -140,13 +142,17 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun home(navController: NavHostController)
 {
-    val pagerState = rememberPagerState()
-    HorizontalPager(count = 2, state = pagerState, itemSpacing = 0.dp) { page ->
-        when (page) {
-            0 -> lazy(navController, colorline_and_text)
-            1 -> info(navController)
-        }
-    }
+
+    lazy(navController, colorline_and_text)
+
+//val pagerState = rememberPagerState()
+//    HorizontalPager(count = 2, state = pagerState, itemSpacing = 0.dp) { page ->
+//        when (page) {
+//            0 -> lazy(navController, colorline_and_text)
+//            1 -> info(navController)
+//        }
+//    }
+
 }
 
 @Composable

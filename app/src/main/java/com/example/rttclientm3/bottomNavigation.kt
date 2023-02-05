@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -11,6 +12,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import libs.ipToBroadCast
@@ -104,6 +107,37 @@ fun bottomNavigationLazy(navController: NavHostController) {
                     text = "Сброс", color = Color.LightGray
                 )
             }
+
+
+            //Кнопка
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050))
+                ,modifier = Modifier
+                    .fillMaxHeight()
+                    //.width(110.dp)
+                    .weight(1f)
+                    .padding(top = 8.dp, bottom = 8.dp),
+
+                onClick = {
+
+                    navController.navigate("info")
+
+                }
+
+            ) {
+
+
+                
+                Icon(painter = painterResource(R.drawable.three_dots),tint =  Color.LightGray ,contentDescription = null)
+
+
+//                Text(
+//                    text = "I", color = Color.LightGray
+//                )
+            }
+
+
 
             Spacer(modifier = Modifier.width(8.dp))
 

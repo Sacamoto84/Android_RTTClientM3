@@ -59,7 +59,6 @@ fun ping(ip: String = "http://192.168.0.200"): Boolean {
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SetJavaScriptEnabled")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Web(navController: NavController) {
 
@@ -114,56 +113,6 @@ fun Web(navController: NavController) {
 
         }
 
-
     }
 
-
-    /*
-
-        Box() {
-
-            val reload = remember { mutableStateOf(false) }
-            val state = rememberWebViewState("http://$ipESP")
-            val coroutineScope: CoroutineScope = rememberCoroutineScope()
-            val navigator = WebViewNavigator(coroutineScope)
-            val ping = remember { mutableStateOf(ping()) }
-
-            Column(
-                Modifier
-                    .padding(5.dp)
-                    .fillMaxSize()
-            )
-            {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        reload.value = true
-                        ping.value = ping()
-                        navigator.reload()
-                    })
-                {
-                    Text(text = "Обновить портал")
-                }
-
-                if (ping.value)
-                    WebView(
-                        modifier = Modifier
-                            .padding(0.dp)
-                            .border(
-                                width = 5.dp,
-                                color = Color(0xFF6650a4),
-                                shape = RoundedCornerShape(20.dp)
-                            ),
-                        navigator = navigator,
-                        state = state,
-                        captureBackPresses = false,
-                        onCreated = { webWiew ->
-                            webWiew.settings.javaScriptEnabled = true
-                        }
-                    )
-                else
-                    Text(text = "Отсуствует связь с $ipESP")
-            }
-        }
-*/
 }

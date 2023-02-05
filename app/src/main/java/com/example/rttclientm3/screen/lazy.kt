@@ -29,7 +29,7 @@ import kotlinx.coroutines.delay
 var manual_recomposeLazy = mutableStateOf(0)
 
 @Composable
-fun lazy(navController: NavController, messages: SnapshotStateList< lineTextAndColor >) {
+fun lazy(navController: NavController, messages: SnapshotStateList<lineTextAndColor>) {
     var update by remember { mutableStateOf(true) }  //для мигания
     //println("---lazy---")
     val lazyListState: LazyListState = rememberLazyListState()
@@ -65,7 +65,11 @@ fun lazy(navController: NavController, messages: SnapshotStateList< lineTextAndC
         }
     }
 
-    Column(Modifier.fillMaxSize().background(Color(0xFF090909))) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(Color(0xFF090909))
+    ) {
         Box(
             Modifier
                 .fillMaxSize()
@@ -83,54 +87,66 @@ fun lazy(navController: NavController, messages: SnapshotStateList< lineTextAndC
                 val z = manual_recomposeLazy.value
                 //println("LAZY Счетчик рекомпозиций $z")
 
+                val driver = 0
+
                 itemsIndexed(messages.toList())
                 { index, item ->
-                    Row()
-                    {
 
-                        val s = item.pairList.size
 
-                        if ((s > 0)&&( isCheckedUselineVisible.value)) {
+                    if (driver == 1)
+                        ScriptItemDraw({ item }, { index }, { false })
+                    else
 
-                            val str: String = when (index) {
-                                in 0..9 -> String.format("   %d>", index)
-                                in 10..99 -> String.format("  %d>", index)
-                                in 100..999 -> String.format(" %d>", index)
-                                else -> String.format("%d>", index)
-                            }
+                        Row()
+                        {
+
+                            val s = item.pairList.size
+
+                            if ((s > 0) && (isCheckedUselineVisible.value)) {
+
+                                val str: String = when (index) {
+                                    in 0..9 -> String.format("   %d>", index)
+                                    in 10..99 -> String.format("  %d>", index)
+                                    in 100..999 -> String.format(" %d>", index)
+                                    else -> String.format("%d>", index)
+                                }
                                 Text(
                                     text = str,
-                                    color = if ( item.text.isBlank()) Color.Black else Color.Gray,
+                                    color = if (item.text.isBlank()) Color.Black else Color.Gray,
                                     fontSize = console_text.value,
                                     fontFamily = FontFamily(
                                         Font(R.font.jetbrains, FontWeight.Normal)
                                     )
                                 )
+                            }
+
+                            for (i in 0 until s) {
+                                Text(
+                                    text = item.pairList[i].text,
+                                    color = if (!item.pairList[i].flash)
+                                        item.pairList[i].colorText
+                                    else
+                                        if (update) item.pairList[i].colorText else Color(0xFF090909),
+                                    modifier = Modifier.background(
+                                        if (!item.pairList[i].flash)
+                                            item.pairList[i].colorBg
+                                        else
+                                            if (update) item.pairList[i].colorBg else Color(
+                                                0xFF090909
+                                            )
+                                    ),
+                                    textDecoration = if (item.pairList[i].underline) TextDecoration.Underline else null,
+                                    fontWeight = if (item.pairList[i].bold) FontWeight.Bold else null,
+                                    fontStyle = if (item.pairList[i].italic) FontStyle.Italic else null,
+                                    fontSize = console_text.value,
+                                    fontFamily = FontFamily(
+                                        Font(R.font.jetbrains, FontWeight.Normal)
+                                    )
+                                )
+                            }
                         }
 
-                        for (i in 0 until s) {
-                            Text(
-                                text = item.pairList[i].text,
-                                color = if (!item.pairList[i].flash)
-                                    item.pairList[i].colorText
-                                else
-                                    if (update) item.pairList[i].colorText else Color(0xFF090909),
-                                modifier = Modifier.background(
-                                    if (!item.pairList[i].flash)
-                                        item.pairList[i].colorBg
-                                    else
-                                        if (update) item.pairList[i].colorBg else Color(0xFF090909)
-                                ),
-                                textDecoration = if (item.pairList[i].underline) TextDecoration.Underline else null,
-                                fontWeight = if (item.pairList[i].bold) FontWeight.Bold else null,
-                                fontStyle = if (item.pairList[i].italic) FontStyle.Italic else null,
-                                fontSize = console_text.value,
-                                fontFamily = FontFamily(
-                                    Font(R.font.jetbrains, FontWeight.Normal)
-                                )
-                            )
-                        }
-                    }
+
                 }
             }                                                  //
             ///////////////////////////////////////////////////////////
@@ -158,10 +174,9 @@ fun lazy(navController: NavController, messages: SnapshotStateList< lineTextAndC
     }
 }
 
-fun consoleAdd(text : String, color : Color = Color.Green , bgColor : Color = Color.Black) {
+fun consoleAdd(text: String, color: Color = Color.Green, bgColor: Color = Color.Black) {
 
-    if (colorline_and_text.last().text == " ")
-    {
+    if (colorline_and_text.last().text == " ") {
         colorline_and_text.removeAt(colorline_and_text.lastIndex)
 
         colorline_and_text.add(
@@ -177,9 +192,7 @@ fun consoleAdd(text : String, color : Color = Color.Green , bgColor : Color = Co
             )
         )
 
-    }
-    else
-    {
+    } else {
         colorline_and_text.add(
             lineTextAndColor(
                 text,
@@ -193,7 +206,6 @@ fun consoleAdd(text : String, color : Color = Color.Green , bgColor : Color = Co
             )
         )
     }
-
 
 
 }
