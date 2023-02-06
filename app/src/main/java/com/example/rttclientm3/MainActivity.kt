@@ -3,7 +3,6 @@ package com.example.rttclientm3
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.drawable.VectorDrawable
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.text.format.Formatter
@@ -11,28 +10,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.rttclientm3.screen.consoleAdd
 import com.example.rttclientm3.ui.theme.RTTClientM3Theme
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import libs.KeepScreenOn
 import libs.ipToBroadCast
 import libs.readIP
@@ -69,6 +60,8 @@ class MainActivity : ComponentActivity() {
         ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
         print(ipAddress)
 
+
+
         //Нужно добавить ее в список лази как текущую
         colorline_and_text.add(
             lineTextAndColor(
@@ -86,7 +79,7 @@ class MainActivity : ComponentActivity() {
                         colorBg = Color(0xFF587C2F),
                     ),
                     pairTextAndColor(
-                        text = " v2.5.5 ",
+                        text = " v2.5.8 ",
                         colorText = Color(0xFF00E2FF),
                         colorBg = Color(0xFF334292),
                     ),
@@ -116,7 +109,9 @@ class MainActivity : ComponentActivity() {
                 )
             )
         )
-        consoleAdd(" ") //Пустая строка
+
+        consoleAdd("") //Пустая строка
+
         setContent {
             ipBroadcast = ipToBroadCast(readIP(applicationContext))
             KeepScreenOn()
@@ -143,7 +138,7 @@ class MainActivity : ComponentActivity() {
 fun home(navController: NavHostController)
 {
 
-    lazy(navController, colorline_and_text)
+    com.example.rttclientm3.screen.lazy(navController, colorline_and_text)
 
 //val pagerState = rememberPagerState()
 //    HorizontalPager(count = 2, state = pagerState, itemSpacing = 0.dp) { page ->
@@ -167,7 +162,7 @@ fun BuildNavGraph(navController: NavHostController) {
         }
 
         composable(route = "console") {
-            lazy(navController, colorline_and_text)
+            com.example.rttclientm3.screen.lazy(navController, colorline_and_text)
         }
 
         composable(route = "info") {

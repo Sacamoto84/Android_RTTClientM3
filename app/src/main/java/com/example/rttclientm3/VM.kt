@@ -1,12 +1,10 @@
 package com.example.rttclientm3
 
-import android.content.Context
 import android.net.nsd.NsdServiceInfo
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rttclientm3.screen.consoleAdd
+import com.example.rttclientm3.screen.manual_recomposeLazy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch

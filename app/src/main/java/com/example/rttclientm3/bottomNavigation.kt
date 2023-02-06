@@ -12,10 +12,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.rttclientm3.screen.consoleAdd
 import libs.ipToBroadCast
 import libs.readIP
 import libs.sendUDP
@@ -58,18 +58,15 @@ fun bottomNavigationLazy(navController: NavHostController) {
                     lastCount = colorline_and_text.size
                 }
             ) {
-                Text(text = "${colorline_and_text.size - 1}")
+                Text(text = "${colorline_and_text.count{ it.pairList.isNotEmpty() }}")
             }
 
             //Кнопка сброса списка
             Spacer(modifier = Modifier.width(8.dp))
             Button(
 
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050))
-                ,modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .padding(top = 8.dp, bottom = 8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
+                modifier = Modifier.fillMaxHeight().weight(1f).padding(top = 8.dp, bottom = 8.dp),
                 onClick = {
                     colorline_and_text.removeRange(0, colorline_and_text.lastIndex)
                     consoleAdd(" ")
@@ -83,12 +80,12 @@ fun bottomNavigationLazy(navController: NavHostController) {
             //Кнопка перезагрузки контроллера
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050))
-                ,modifier = Modifier
-                .fillMaxHeight()
-                //.width(110.dp)
-                .weight(1f)
-                .padding(top = 8.dp, bottom = 8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    //.width(110.dp)
+                    .weight(1f)
+                    .padding(top = 8.dp, bottom = 8.dp),
                 onClick = {
                     val s =
                         sendUDP("Reset", ip = ipToBroadCast(readIP(contex = contex!!)), port = 8889)
@@ -112,8 +109,8 @@ fun bottomNavigationLazy(navController: NavHostController) {
             //Кнопка
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050))
-                ,modifier = Modifier
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
+                modifier = Modifier
                     .fillMaxHeight()
                     //.width(110.dp)
                     .weight(1f)
@@ -128,8 +125,11 @@ fun bottomNavigationLazy(navController: NavHostController) {
             ) {
 
 
-                
-                Icon(painter = painterResource(R.drawable.three_dots),tint =  Color.LightGray ,contentDescription = null)
+                Icon(
+                    painter = painterResource(R.drawable.three_dots),
+                    tint = Color.LightGray,
+                    contentDescription = null
+                )
 
 
 //                Text(

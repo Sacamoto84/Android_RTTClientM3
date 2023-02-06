@@ -3,6 +3,7 @@ package com.example.rttclientm3
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
+import com.example.rttclientm3.screen.consoleAdd
 
 val allcolor = mutableListOf<Color>()
 
