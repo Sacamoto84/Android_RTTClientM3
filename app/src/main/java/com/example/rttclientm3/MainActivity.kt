@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.rttclientm3.screen.Web
 import com.example.rttclientm3.screen.consoleAdd
 import com.example.rttclientm3.ui.theme.RTTClientM3Theme
 import com.google.accompanist.pager.ExperimentalPagerApi

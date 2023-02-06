@@ -1,15 +1,11 @@
-package com.example.rttclientm3
+package com.example.rttclientm3.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -18,8 +14,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.rttclientm3.ipESP
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.web.WebView
@@ -64,7 +60,7 @@ fun Web(navController: NavController) {
 
     val reload = remember { mutableStateOf(false) }
 
-    val ip = "http://"+ipESP.substring(ipESP.lastIndexOf('/') + 1)
+    val ip = "http://"+ ipESP.substring(ipESP.lastIndexOf('/') + 1)
     val state = rememberWebViewState(ip)
     println("URL $ip")
 
