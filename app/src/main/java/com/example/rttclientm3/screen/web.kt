@@ -2,7 +2,9 @@ package com.example.rttclientm3.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -22,37 +24,8 @@ import com.google.accompanist.web.WebView
 import com.google.accompanist.web.WebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 import kotlinx.coroutines.CoroutineScope
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.MalformedURLException
-import java.net.URL
+import libs.lan.libLanPing
 
-fun ping(ip: String = "http://192.168.0.200"): Boolean {
-    try {
-        val url = URL("${ip}")
-        val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-        connection.setRequestProperty("Connection", "close")
-        connection.connectTimeout = 1000
-        connection.connect()
-
-        return when (connection.responseCode) {
-            200, 403 -> true
-            else -> false
-        }
-
-    } catch (e: Exception) {
-        when (e) {
-            is MalformedURLException -> "loadLink: Invalid URL ${e.message}"
-            is IOException -> "loadLink: IO Exception reading data: ${e.message}"
-            is SecurityException -> {
-                e.printStackTrace()
-                "loadLink: Security Exception. Needs permission? ${e.message}"
-            }
-            else -> "Unknown error: ${e.message}"
-        }
-    }
-    return false
-}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SetJavaScriptEnabled")
 @Composable
@@ -66,7 +39,7 @@ fun Web(navController: NavController) {
 
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val navigator = WebViewNavigator(coroutineScope)
-    val ping = remember { mutableStateOf(ping(ip)) }
+    val ping = remember { mutableStateOf(libLanPing(ip)) }
 
     val swipeRefreshState = rememberSwipeRefreshState(false)
 
@@ -75,7 +48,7 @@ fun Web(navController: NavController) {
         state = swipeRefreshState,
         onRefresh = {
             println("onRefresh")
-            ping.value = ping(ip)
+            ping.value = libLanPing(ip)
             navigator.reload()
         }
     ) {
