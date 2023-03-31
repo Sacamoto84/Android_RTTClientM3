@@ -12,6 +12,9 @@ import kotlinx.coroutines.withContext
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 
+//Канал передачи
+val channel = Channel<String>(1000000)
+
 class VM : ViewModel() {
 
 
@@ -43,8 +46,7 @@ class VM : ViewModel() {
     }
 
 
-    //Канал передачи
-    private val channel = Channel<String>(1000000)
+
 
     fun launchUDPRecive() {
         viewModelScope.launch {
@@ -90,7 +92,8 @@ class VM : ViewModel() {
 
             val stringCorrection = string.replace('\n', '▒')
             //println("!reciveUI!>>Из канала>>$string")
-            println("!reciveUI!>>Из канала Коррекция>>$stringCorrection")
+
+            //println("!reciveUI!>>Из канала Коррекция>>$stringCorrection")
 
             //println("!reciveUI!>>BigStr>>$bigStr")
             //println("!reciveUI! Есть \\n = ${bigStr.indexOf('\n')} Длинна ${bigStr.length}")
