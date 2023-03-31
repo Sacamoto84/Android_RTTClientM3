@@ -376,7 +376,7 @@ fun Modifier.scrollbar(
         tween(delayMillis = animationDelayMs, durationMillis = animationDurationMs)
     )
 
-    val debug = true
+    val debug = false
 
     drawWithContent {
         drawContent()

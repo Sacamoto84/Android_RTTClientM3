@@ -72,8 +72,8 @@ class MainActivity : ComponentActivity() {
         bluetoothAdapter = bluetoothManager.adapter
 
         bt.getPairedDevices()
-
-        bt.connect()
+        //bt.connect()
+        bt.autoconnect()
 
         contex = applicationContext
 

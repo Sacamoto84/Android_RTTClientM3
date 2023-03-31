@@ -21,6 +21,10 @@ import java.io.OutputStream
 import java.util.UUID
 
 
+enum class BTstatus {
+    DISCONNECT, CONNECTING, CONNECTED, RECEIVE
+}
+
 var btIsConnected by mutableStateOf(false)
 
 var btIsReady by mutableStateOf(false)
@@ -30,6 +34,8 @@ lateinit var esp32device: BluetoothDevice
 
 private var mSocket: BluetoothSocket? = null
 private const val uuid = "00001101-0000-1000-8000-00805F9B34FB"
+
+var btStatus = BTstatus.DISCONNECT
 
 object bt {
 
@@ -52,6 +58,7 @@ object bt {
     fun connect() {
 
         if (bluetoothAdapter.isEnabled) {
+            btStatus = BTstatus.CONNECTING
             val device = esp32device //bluetoothAdapter.getRemoteDevice(mac)
             connectScope(device)
         }
@@ -62,11 +69,14 @@ object bt {
 //    }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun autoconnect()
-    {
+    fun autoconnect() {
         GlobalScope.launch(Dispatchers.IO) {
-
-
+            while(true) {
+                delay(1000)
+                if (btStatus == BTstatus.DISCONNECT) {
+                    connect()
+                }
+            }
         }
     }
 
@@ -84,31 +94,29 @@ fun connectScope(device: BluetoothDevice) {
             mSocket?.connect()
             Timber.i("Подключились к устройству")
             btIsConnected = true
+            btStatus = BTstatus.CONNECTED
             receiveScope()
         } catch (e: IOException) {
             btIsConnected = false
             mSocket?.close()
             Timber.e("Не смогли подключиться к устройсву ${e.message}")
+            btStatus = BTstatus.DISCONNECT
         }
     }
 
 }
 
 
-
 @OptIn(DelicateCoroutinesApi::class)
-fun receiveScope()
-{
-    var inStream: InputStream? = null
-
-    try {
-        inStream = mSocket?.inputStream
-
-    } catch (e: IOException) {
-        Timber.e("Ошибка создания inputStream")
-    }
-
+fun receiveScope() {
     GlobalScope.launch(Dispatchers.IO) {
+        btStatus = BTstatus.RECEIVE
+        var inStream: InputStream? = null
+        try {
+            inStream = mSocket?.inputStream
+        } catch (e: IOException) {
+            Timber.e("Ошибка создания inputStream")
+        }
         val buf = inStream?.bufferedReader(Charsets.UTF_8)
         while (true) {
             try {
@@ -127,6 +135,7 @@ fun receiveScope()
                 break  //При отключении подключения
             }
         }
+        btStatus = BTstatus.DISCONNECT
     }
 
 }
