@@ -91,6 +91,7 @@ class MainActivity : ComponentActivity() {
         colorJsonToList()
 
         vm.launchUDPReceive()
+        vm.launchDecoder()
 
         val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)

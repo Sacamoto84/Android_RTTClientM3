@@ -11,8 +11,7 @@ class UDP(private val port: Int = 8888, private val channel: Channel<String>) {
     suspend fun receiveScope() = withContext(Dispatchers.IO) {
         println("Запуск UDP receiveScope")
         val buffer = ByteArray(1024 * 1024)
-        var socket: DatagramSocket? = null
-        socket = DatagramSocket(port)
+        val socket: DatagramSocket = DatagramSocket(port)
         socket.broadcast = true
         val packet = DatagramPacket(buffer, buffer.size)
         socket.receiveBufferSize = 1024 * 1024
