@@ -100,9 +100,6 @@ class VM : ViewModel() {
                 consoleAdd("") //Пустая строка
             }
 
-
-
-
         }
 
 
