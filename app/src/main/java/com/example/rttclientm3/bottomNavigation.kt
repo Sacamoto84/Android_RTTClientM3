@@ -115,28 +115,41 @@ fun bottomNavigationLazy(navController: NavHostController) {
                     //.width(110.dp)
                     .weight(1f)
                     .padding(top = 8.dp, bottom = 8.dp),
-
                 onClick = {
 
                     navController.navigate("info")
 
                 }
-
             ) {
-
-
                 Icon(
                     painter = painterResource(R.drawable.three_dots),
                     tint = Color.LightGray,
                     contentDescription = null
                 )
-
-
-//                Text(
-//                    text = "I", color = Color.LightGray
-//                )
             }
 
+
+            //Кнопка Connect BT
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    //.width(110.dp)
+                    .weight(1f)
+                    .padding(top = 8.dp, bottom = 8.dp),
+                onClick = {
+
+                  bt.connect()
+
+                }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.three_dots),
+                    tint = Color.LightGray,
+                    contentDescription = null
+                )
+            }
 
 
             Spacer(modifier = Modifier.width(8.dp))
