@@ -15,6 +15,9 @@ import java.net.DatagramSocket
 class VM : ViewModel() {
 
 
+
+
+
     // Declare NsdHelper object for service discovery
     private val nsdHelper: NsdHelper? = object : NsdHelper(contex!!) {
         override fun onNsdServiceResolved(service: NsdServiceInfo) {

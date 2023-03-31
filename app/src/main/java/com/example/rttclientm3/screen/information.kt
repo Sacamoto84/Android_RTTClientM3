@@ -1,4 +1,4 @@
-package com.example.rttclientm3
+package com.example.rttclientm3.screen
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -11,12 +11,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.rttclientm3.screen.consoleAdd
+
+import com.example.rttclientm3.colorIn256
+import com.example.rttclientm3.console_text
+import com.example.rttclientm3.ipAddress
+import com.example.rttclientm3.ipESP
+import com.example.rttclientm3.isCheckedUseLiteralEnter
+import com.example.rttclientm3.isCheckedUselineVisible
+import com.example.rttclientm3.shared
 
 //MARK: Локальные дефайны
 val textSize = 12.sp
 val fontWeight = FontWeight.Normal
 val boxSize = 32.dp
+
+
+//// Определяем компонент для отрисовки графики с помощью OpenGl
+//@Composable
+//fun OpenGlView(vectorAsset: VectorAsset){
+//    Box(){
+//        OpenGLView(vectorAsset=vectorAsset)
+//    }
+//}
+
+
+
+
 
 @Composable
 fun info(navController: NavController) {

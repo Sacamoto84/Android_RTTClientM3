@@ -1,21 +1,37 @@
 package com.example.rttclientm3
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Bundle
 import android.text.format.Formatter
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,8 +39,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.rttclientm3.screen.Web
 import com.example.rttclientm3.screen.consoleAdd
+import com.example.rttclientm3.screen.info
 import com.example.rttclientm3.ui.theme.RTTClientM3Theme
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import libs.KeepScreenOn
 import libs.ipToBroadCast
 import libs.readIP
@@ -36,6 +55,10 @@ lateinit var ipAddress: String
 
 class MainActivity : ComponentActivity() {
 
+    private val vm: VM by viewModels()
+
+
+    @OptIn(ExperimentalPermissionsApi::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,13 +77,11 @@ class MainActivity : ComponentActivity() {
         //Создаем список цветов из Json цветов
         colorJsonToList()
 
-        val vm: VM by viewModels()
         vm.launchUDPRecive()
 
         val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
         print(ipAddress)
-
 
 
         //Нужно добавить ее в список лази как текущую
@@ -80,7 +101,7 @@ class MainActivity : ComponentActivity() {
                         colorBg = Color(0xFF587C2F),
                     ),
                     pairTextAndColor(
-                        text = " v2.5.8 ",
+                        text = " v2.5.9 ",
                         colorText = Color(0xFF00E2FF),
                         colorBg = Color(0xFF334292),
                     ),
@@ -114,20 +135,102 @@ class MainActivity : ComponentActivity() {
         consoleAdd("") //Пустая строка
 
         setContent {
+
+            val bluetoothPermissions =
+                // Checks if the device has Android 12 or above
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    rememberMultiplePermissionsState(
+                        permissions = listOf(
+                            android.Manifest.permission.BLUETOOTH,
+                            android.Manifest.permission.BLUETOOTH_ADMIN,
+                            android.Manifest.permission.BLUETOOTH_CONNECT,
+                            android.Manifest.permission.BLUETOOTH_SCAN,
+                        )
+                    )
+                } else {
+                    rememberMultiplePermissionsState(
+                        permissions = listOf(
+                            android.Manifest.permission.BLUETOOTH,
+                            android.Manifest.permission.BLUETOOTH_ADMIN,
+                        )
+                    )
+                }
+
+
+            // This intent will open the enable bluetooth dialog
+            val enableBluetoothIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+
+            val bluetoothManager = remember {
+                applicationContext.getSystemService(BluetoothManager::class.java)
+            }
+            val bluetoothAdapter: BluetoothAdapter? = remember {
+                bluetoothManager.adapter
+            }
+
+
+
+
+
+
             ipBroadcast = ipToBroadCast(readIP(applicationContext))
             KeepScreenOn()
             vm.launchUIChanelRecive()
             val navController = rememberNavController()
             RTTClientM3Theme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
 
-                    BuildNavGraph(navController)
+
+                val enableBluetoothContract = rememberLauncherForActivityResult(
+                    ActivityResultContracts.StartActivityForResult()
+                ) {
+                    if (it.resultCode == Activity.RESULT_OK) {
+                        Log.d("bluetoothLauncher", "Success")
+                        //bluetoothPrint.print()
+                    } else {
+                        Log.w("bluetoothLauncher", "Failed")
+                    }
+                }
+
+
+
+                if (bluetoothPermissions.allPermissionsGranted) {
+
+                    if (bluetoothAdapter?.isEnabled == true) {
+
+                        Surface(
+                            modifier = Modifier.fillMaxSize(),
+                            color = MaterialTheme.colorScheme.background
+                        ) {
+                            BuildNavGraph(navController)
+                        }
+                    } else {
+
+                        Surface(
+                            modifier = Modifier.size(100.dp),
+                            color = MaterialTheme.colorScheme.background
+                        ) {
+
+                            Button(onClick = {
+
+                                if (bluetoothPermissions.allPermissionsGranted) {
+                                    if (bluetoothAdapter?.isEnabled == true) {
+                                        // Bluetooth is on print the receipt
+                                        //bluetoothPrint.print()
+                                    } else {
+                                        // Bluetooth is off, ask user to turn it on
+                                        enableBluetoothContract.launch(enableBluetoothIntent)
+                                    }
+                                }
+                            }) {
+                                Text(text = "3333333")
+                            }
+
+                        }
+                    }
+
 
                 }
+
+
             }
         }
     }
@@ -136,8 +239,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun home(navController: NavHostController)
-{
+fun home(navController: NavHostController) {
 
     com.example.rttclientm3.screen.lazy(navController, colorline_and_text)
 
