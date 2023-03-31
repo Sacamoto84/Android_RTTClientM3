@@ -3,6 +3,8 @@ package com.example.rttclientm3
 import android.net.nsd.NsdServiceInfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rttclientm3.network.UDP
+import com.example.rttclientm3.network.channelNetworkIn
 import com.example.rttclientm3.screen.consoleAdd
 import com.example.rttclientm3.screen.manual_recomposeLazy
 import kotlinx.coroutines.Dispatchers
@@ -12,14 +14,9 @@ import kotlinx.coroutines.withContext
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 
-//Канал передачи
-val channel = Channel<String>(1000000)
+
 
 class VM : ViewModel() {
-
-
-
-
 
     // Declare NsdHelper object for service discovery
     private val nsdHelper: NsdHelper? = object : NsdHelper(contex!!) {
@@ -45,12 +42,10 @@ class VM : ViewModel() {
 
     }
 
-
-
-
-    fun launchUDPRecive() {
-        viewModelScope.launch {
-            UDPRoutine()
+    fun launchUDPReceive() {
+        val udp = UDP(8888, channelNetworkIn)
+        viewModelScope.launch{
+            udp.receiveScope()
         }
     }
 
@@ -80,21 +75,16 @@ class VM : ViewModel() {
 
     private suspend fun reciveUI() = withContext(Dispatchers.Main)
     {
-        val bigStr: StringBuilder =
-            StringBuilder()//Большая строка в которую и складируются данные с канала
+        val bigStr: StringBuilder = StringBuilder()//Большая строка в которую и складируются данные с канала
 
         while (true) {
 
-            val string =
-                channel.receive() //Получить строку с канала, сможет соделжать несколько строк
-
+            val string = channelNetworkIn.receive() //Получить строку с канала, сможет соделжать несколько строк
             bigStr.append(string) //Захерячиваем в большую строку
 
             val stringCorrection = string.replace('\n', '▒')
             //println("!reciveUI!>>Из канала>>$string")
-
             //println("!reciveUI!>>Из канала Коррекция>>$stringCorrection")
-
             //println("!reciveUI!>>BigStr>>$bigStr")
             //println("!reciveUI! Есть \\n = ${bigStr.indexOf('\n')} Длинна ${bigStr.length}")
 
@@ -116,8 +106,7 @@ class VM : ViewModel() {
                     //Получить полную запись посленней строки
                     colorline_and_text.last().text += stringDoN
 
-                    if (isCheckedUseLiteralEnter.value)
-                      colorline_and_text.last().text += '⤵'
+                    if (isCheckedUseLiteralEnter.value) colorline_and_text.last().text += '⤵'
 
                     //println("!reciveUI! Старая строка >>${colorline_and_text.last().text}")
 
@@ -125,8 +114,7 @@ class VM : ViewModel() {
                     val pair = text_to_paitList(colorline_and_text.last().text)
                     colorline_and_text.last().pairList = pair
 
-                    manual_recomposeLazy.value =
-                        manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
+                    manual_recomposeLazy.value = manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
 
                     consoleAdd("") //Пустая строка
 
@@ -154,20 +142,4 @@ class VM : ViewModel() {
         }
     }
 
-    private suspend fun UDPRoutine() = withContext(Dispatchers.IO) {
-        println("Запуск UDPRoutine ")
-        val buffer = ByteArray(1024 * 128)
-        var socket: DatagramSocket? = null
-        socket = DatagramSocket(8888)
-        socket.broadcast = true
-        val packet = DatagramPacket(buffer, buffer.size)
-        socket.receiveBufferSize = 1024 * 512
-        while (true) {
-            socket.receive(packet)
-            val buffer1: ByteArray = packet.data.copyOfRange(0, packet.length)
-            val string = String(buffer1)
-            //println("!UDPRoutine! packet RAW=[$string")
-            channel.send(string)
-        }
-    }
 }

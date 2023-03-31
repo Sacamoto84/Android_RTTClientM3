@@ -1,4 +1,4 @@
-package com.example.rttclientm3
+package com.example.rttclientm3.network
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
@@ -17,32 +17,31 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
-import java.io.OutputStream
 import java.util.UUID
-
 
 enum class BTstatus {
     DISCONNECT, CONNECTING, CONNECTED, RECEIVE
 }
 
+var btStatus = BTstatus.DISCONNECT
+
 var btIsConnected by mutableStateOf(false)
 
 var btIsReady by mutableStateOf(false)
+
 lateinit var bluetoothManager: BluetoothManager
 lateinit var bluetoothAdapter: BluetoothAdapter
-lateinit var esp32device: BluetoothDevice
+private lateinit var esp32device: BluetoothDevice
 
 private var mSocket: BluetoothSocket? = null
 private const val uuid = "00001101-0000-1000-8000-00805F9B34FB"
 
-var btStatus = BTstatus.DISCONNECT
 
 object bt {
 
     @SuppressLint("MissingPermission")
     fun getPairedDevices() {
         val pairedDevices: Set<BluetoothDevice> = bluetoothAdapter.bondedDevices
-
         pairedDevices.forEach {
             println(it.name)
             println(it.address)
@@ -50,9 +49,7 @@ object bt {
                 println(u.toString())
             }
         }
-
         esp32device = pairedDevices.first { it.name == "ESP32" }
-
     }
 
     fun connect() {
@@ -80,13 +77,10 @@ object bt {
         }
     }
 
-
 }
-
 
 @OptIn(DelicateCoroutinesApi::class)
 fun connectScope(device: BluetoothDevice) {
-
     GlobalScope.launch(Dispatchers.IO) {
         try {
             mSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(uuid))
@@ -103,9 +97,7 @@ fun connectScope(device: BluetoothDevice) {
             btStatus = BTstatus.DISCONNECT
         }
     }
-
 }
-
 
 @OptIn(DelicateCoroutinesApi::class)
 fun receiveScope() {
@@ -122,8 +114,7 @@ fun receiveScope() {
             try {
                 if (buf != null) {
                     val s = buf.read().toChar()
-                    //Timber.i(s.toString())
-                    channel.send(s.toString())
+                    channelNetworkIn.send(s.toString())
                 }
             } catch (e: IOException) {
                 Timber.e("Ошибка в приеменом потоке ${e.message}")

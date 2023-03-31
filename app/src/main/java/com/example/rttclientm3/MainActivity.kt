@@ -29,6 +29,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.rttclientm3.network.bluetoothAdapter
+import com.example.rttclientm3.network.bluetoothManager
+import com.example.rttclientm3.network.bt
+import com.example.rttclientm3.network.btIsReady
 import com.example.rttclientm3.screen.Web
 import com.example.rttclientm3.screen.consoleAdd
 import com.example.rttclientm3.screen.info
@@ -56,9 +60,6 @@ lateinit var ipAddress: String
 class MainActivity : ComponentActivity() {
 
     private val vm: VM by viewModels()
-
-
-
 
     @OptIn(ExperimentalPermissionsApi::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -89,7 +90,7 @@ class MainActivity : ComponentActivity() {
         //Создаем список цветов из Json цветов
         colorJsonToList()
 
-        vm.launchUDPRecive()
+        vm.launchUDPReceive()
 
         val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
@@ -147,11 +148,6 @@ class MainActivity : ComponentActivity() {
         consoleAdd("") //Пустая строка
 
         setContent {
-
-
-
-
-
 
             ipBroadcast = ipToBroadCast(readIP(applicationContext))
             KeepScreenOn()

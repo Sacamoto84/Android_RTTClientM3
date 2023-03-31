@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.rttclientm3.network.btIsConnected
 import com.example.rttclientm3.screen.consoleAdd
 import libs.ipToBroadCast
 import libs.readIP
