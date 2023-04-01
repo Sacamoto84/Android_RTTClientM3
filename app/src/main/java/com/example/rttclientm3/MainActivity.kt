@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.format.Formatter
 import android.util.Log
-import android.util.Range
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -30,13 +29,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.rttclientm3.network.CommandDecoder
+import com.example.rttclientm3.network.NetCommandDecoder
 import com.example.rttclientm3.network.bluetoothAdapter
 import com.example.rttclientm3.network.bluetoothManager
 import com.example.rttclientm3.network.bt
 import com.example.rttclientm3.network.btIsReady
 import com.example.rttclientm3.network.channelCommand
-import com.example.rttclientm3.network.channelCommandOut
+import com.example.rttclientm3.network.channelLastString
+import com.example.rttclientm3.network.channelNetworkIn
 import com.example.rttclientm3.screen.Web
 import com.example.rttclientm3.screen.consoleAdd
 import com.example.rttclientm3.screen.info
@@ -92,9 +92,12 @@ class MainActivity : ComponentActivity() {
         colorJsonToList()
 
         vm.launchUDPReceive()
-        vm.launchDecoder()
+        //vm.launchDecoder()
 
-        CommandDecoder(channelCommand, channelCommandOut).run()
+        NetCommandDecoder(channelNetworkIn, channelCommand, channelLastString).run()
+
+        //CommandDecoder(channelCommand, channelCommandOut).run()
+
 
         val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
