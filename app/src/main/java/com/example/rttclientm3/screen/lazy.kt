@@ -48,7 +48,7 @@ import kotlinx.coroutines.delay
 var manual_recomposeLazy = mutableStateOf(0)
 
 @Composable
-fun lazy(navController: NavController, messages: SnapshotStateList<lineTextAndColor>) {
+fun lazy(navController: NavController, messages: MutableList<lineTextAndColor>) {
     var update by remember { mutableStateOf(true) }  //для мигания
     //println("---lazy---")
     val lazyListState: LazyListState = rememberLazyListState()

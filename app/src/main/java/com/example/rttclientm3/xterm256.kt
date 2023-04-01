@@ -32,7 +32,7 @@ data class lineTextAndColor(
     var pairList: List<pairTextAndColor> //То что будет отрендеренно в этой строке
 )
 
-val colorline_and_text = mutableStateListOf<lineTextAndColor>()
+val colorline_and_text = mutableListOf<lineTextAndColor>()
 
 fun colorJsonToList() {
     val jsonString =
@@ -137,7 +137,7 @@ fun calculateColorInEscString(str: String) {
     }
 
     if (str == "1") {
-        colorline_and_text.removeRange(0, colorline_and_text.lastIndex)
+        colorline_and_text.clear()// removeRange(0, colorline_and_text.lastIndex)
         consoleAdd(" ")
         return
     }

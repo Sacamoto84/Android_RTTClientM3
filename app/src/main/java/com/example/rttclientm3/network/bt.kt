@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothProfile
 import android.bluetooth.BluetoothSocket
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +18,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
+import java.io.OutputStream
 import java.util.UUID
 
 enum class BTstatus {
@@ -99,31 +101,62 @@ fun connectScope(device: BluetoothDevice) {
     }
 }
 
+
 @OptIn(DelicateCoroutinesApi::class)
 fun receiveScope() {
+    btStatus = BTstatus.RECEIVE
+    var inStream: InputStream? = null
+    var outStream: OutputStream? = null
+
+    try {
+        inStream = mSocket?.inputStream
+        outStream = mSocket?.outputStream
+    } catch (e: IOException) {
+        Timber.e("Ошибка создания inputStream")
+    }
+
+    val buf = inStream?.reader(Charsets.UTF_8)?.buffered(1024 * 1024)
+
+    var isExit = false
+
     GlobalScope.launch(Dispatchers.IO) {
-        btStatus = BTstatus.RECEIVE
-        var inStream: InputStream? = null
-        try {
-            inStream = mSocket?.inputStream
-        } catch (e: IOException) {
-            Timber.e("Ошибка создания inputStream")
-        }
-        val buf = inStream?.reader(Charsets.UTF_8)
+
         while (true) {
             try {
+                delay(1000)
+                outStream?.write(1)
+            }
+            catch (e: IOException)
+            {
+                isExit = true
+                break
+            }
+        }
+
+    }
+
+    GlobalScope.launch(Dispatchers.IO) {
+
+
+        while (true) {
+            try {
+
+                if (isExit) throw IOException("Произошла ошибка ввода-вывода")
+
                 if (buf != null) {
-                    var count = 0
                     var s = ""
                     while (buf.ready()) {
                         s += buf.read().toChar()
-                        count++
                     }
+
                     if (s.isNotEmpty())
                         channelNetworkIn.send(s)
+                } else {
+                    Timber.e("buf == null")
                 }
+
             } catch (e: IOException) {
-                Timber.e("Ошибка в приеменом потоке ${e.message}")
+                Timber.e("Ошибка в приемном потоке ${e.message}")
                 withContext(Dispatchers.Main)
                 {
                     btIsConnected = false

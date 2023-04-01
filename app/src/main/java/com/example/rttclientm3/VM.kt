@@ -11,6 +11,7 @@ import com.example.rttclientm3.network.channelNetworkIn
 import com.example.rttclientm3.screen.consoleAdd
 import com.example.rttclientm3.screen.manual_recomposeLazy
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -81,20 +82,33 @@ class VM : ViewModel() {
         return pair
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun receiveUILastString() {
         while (true) {
-            val s = channelLastString.receive()
-            if(s.cmd == "") continue
-            if (isCheckedUseLiteralEnter.value) s.cmd += '⤵'
-            val pair = text_to_paitList(s.cmd)
-            withContext(Dispatchers.Main)
+            val listS = mutableListOf<String>()
+
+            while (!channelLastString.isEmpty)
             {
+
+                val s = channelLastString.receive()
+                if(s.cmd == "") continue
+                if (isCheckedUseLiteralEnter.value) s.cmd += '⤵'
+                val pair = text_to_paitList(s.cmd)
+
                 colorline_and_text.last().text = s.cmd
                 colorline_and_text.last().pairList = pair
-                manual_recomposeLazy.value =
-                    manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
                 if (s.newString) consoleAdd("")
+
             }
+
+
+
+
+            withContext(Dispatchers.Main)
+            {
+                manual_recomposeLazy.value = manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
+            }
+
         }
     }
 

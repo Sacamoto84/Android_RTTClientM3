@@ -24,17 +24,13 @@ class NetCommandDecoder(
             var string =
                 channelIn.receive() //Получить строку с канала, может содежать несколько строк
 
-
-
             string = string.replace('\r', '▒')
 
-            Timber.e( "in>>>${string.length} "+string )
+            //Timber.e( "in>>>${string.length} "+string )
 
             if (string.isEmpty()) continue
 
             bigStr.append(string) //Захерячиваем в большую строку
-
-
 
             //MARK: Будем сами делить на строки
             while (true) {
@@ -50,7 +46,7 @@ class NetCommandDecoder(
                     lastString += stringDoN
                     channelOutCommand.send(NetCommand(lastString, true))
                     channelOutLastString.send(NetCommand(lastString, true))
-                    Timber.i( "out>>>${lastString.length} "+lastString )
+                    //Timber.i( "out>>>${lastString.length} "+lastString )
                     lastString = ""
 
 
@@ -61,7 +57,7 @@ class NetCommandDecoder(
                     lastString += bigStr
                     if(lastString.isNotEmpty()){
                         channelOutLastString.send(NetCommand(lastString, false))
-                        Timber.w( "out>>>${lastString.length} "+lastString )
+                        //Timber.w( "out>>>${lastString.length} "+lastString )
                     }
                     bigStr.clear() //Он отжил свое)
                     break

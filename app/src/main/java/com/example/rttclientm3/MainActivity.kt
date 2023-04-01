@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.format.Formatter
 import android.util.Log
+import android.util.Range
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -50,9 +51,6 @@ var contex: Context? = null
 lateinit var shared: SharedPreferences
 
 lateinit var ipAddress: String
-
-
-
 
 
 
@@ -197,17 +195,15 @@ class MainActivity : ComponentActivity() {
 }
 
 
-
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun ButtonBluetooth()
-{
+private fun ButtonBluetooth() {
     val enableBluetoothContract = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == Activity.RESULT_OK) {
             Log.d("bluetoothLauncher", "Success")
-            btIsReady =  true
+            btIsReady = true
             //bluetoothPrint.print()
         } else {
             Log.w("bluetoothLauncher", "Failed")
@@ -223,20 +219,17 @@ private fun ButtonBluetooth()
     {
         Button(
             onClick = {
-                    if (!bluetoothAdapter.isEnabled) {
-                        // Bluetooth is off, ask user to turn it on
-                        enableBluetoothContract.launch(enableBluetoothIntent)
-                    }
+                if (!bluetoothAdapter.isEnabled) {
+                    // Bluetooth is off, ask user to turn it on
+                    enableBluetoothContract.launch(enableBluetoothIntent)
+                }
             }) {
             Text(text = "Включить Bluetooth")
         }
     }
 
 
-
 }
-
-
 
 
 @Composable

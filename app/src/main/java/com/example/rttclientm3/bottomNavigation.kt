@@ -69,7 +69,7 @@ fun bottomNavigationLazy(navController: NavHostController) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
                 modifier = Modifier.fillMaxHeight().weight(1f).padding(top = 8.dp, bottom = 8.dp),
                 onClick = {
-                    colorline_and_text.removeRange(0, colorline_and_text.lastIndex)
+                    colorline_and_text.clear() //(0, colorline_and_text.lastIndex)
                     consoleAdd(" ")
                 }
             ) {
