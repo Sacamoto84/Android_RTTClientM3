@@ -79,7 +79,7 @@ fun bottomNavigationLazy(navController: NavHostController) {
                 )
             }
 
-            //Кнопка перезагрузки контроллера
+            //Кнопка перегрузки контроллера
             Spacer(modifier = Modifier.width(8.dp))
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),

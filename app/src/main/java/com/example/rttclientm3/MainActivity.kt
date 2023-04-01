@@ -30,10 +30,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.rttclientm3.network.CommandDecoder
 import com.example.rttclientm3.network.bluetoothAdapter
 import com.example.rttclientm3.network.bluetoothManager
 import com.example.rttclientm3.network.bt
 import com.example.rttclientm3.network.btIsReady
+import com.example.rttclientm3.network.channelCommand
+import com.example.rttclientm3.network.channelCommandOut
 import com.example.rttclientm3.screen.Web
 import com.example.rttclientm3.screen.consoleAdd
 import com.example.rttclientm3.screen.info
@@ -90,6 +93,8 @@ class MainActivity : ComponentActivity() {
 
         vm.launchUDPReceive()
         vm.launchDecoder()
+
+        CommandDecoder(channelCommand, channelCommandOut).run()
 
         val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
