@@ -212,7 +212,7 @@ fun lazy(navController: NavController, messages: MutableList<lineTextAndColor>) 
 
 fun consoleAdd(text: String, color: Color = Color.Green, bgColor: Color = Color.Black) {
 
-    if (colorline_and_text.last().text == " ") {
+    if ((colorline_and_text.size>0) && (colorline_and_text.last().text == " ")) {
         colorline_and_text.removeAt(colorline_and_text.lastIndex)
 
         colorline_and_text.add(

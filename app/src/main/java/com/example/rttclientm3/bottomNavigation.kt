@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.rttclientm3.network.btIsConnected
 import com.example.rttclientm3.screen.consoleAdd
+import com.example.rttclientm3.screen.manual_recomposeLazy
 import libs.ipToBroadCast
 import libs.readIP
 import libs.sendUDP
@@ -65,12 +66,12 @@ fun bottomNavigationLazy(navController: NavHostController) {
             //Кнопка сброса списка
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
                 modifier = Modifier.fillMaxHeight().weight(1f).padding(top = 8.dp, bottom = 8.dp),
                 onClick = {
-                    colorline_and_text.clear() //(0, colorline_and_text.lastIndex)
+                    colorline_and_text.clear()
                     consoleAdd(" ")
+                    manual_recomposeLazy.value = manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
                 }
             ) {
                 Text(
