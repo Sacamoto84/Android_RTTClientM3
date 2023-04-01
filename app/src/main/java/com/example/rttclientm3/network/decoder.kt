@@ -4,11 +4,12 @@ import com.example.rttclientm3.colorline_and_text
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class NetCommandDecoder(
     private val channelIn: Channel<String>,
     private val channelOutCommand: Channel<NetCommand>,
-    private val channelOutLastString: Channel<String>
+    private val channelOutLastString: Channel<NetCommand>
 ) {
 
     private var lastString: String = "" //Прошлая строка
@@ -23,7 +24,13 @@ class NetCommandDecoder(
             var string =
                 channelIn.receive() //Получить строку с канала, может содежать несколько строк
 
+
+
             string = string.replace('\r', '▒')
+
+            Timber.e( "in>>>${string.length} "+string )
+
+            if (string.isEmpty()) continue
 
             bigStr.append(string) //Захерячиваем в большую строку
 
@@ -41,16 +48,21 @@ class NetCommandDecoder(
                     bigStr.delete(0, bigStr.indexOf('\n') + 1)
 
                     lastString += stringDoN
-                    channelOutCommand.send(NetCommand(lastString))
+                    channelOutCommand.send(NetCommand(lastString, true))
+                    channelOutLastString.send(NetCommand(lastString, true))
+                    Timber.i( "out>>>${lastString.length} "+lastString )
                     lastString = ""
-                    channelOutLastString.send(lastString)
+
 
                 } else {
                     //Конец строки не найден
                     //MARK: Тут для дополнения прошлой строки
                     //Получить полную запись посленней строки
                     lastString += bigStr
-                    channelOutLastString.send(lastString)
+                    if(lastString.isNotEmpty()){
+                        channelOutLastString.send(NetCommand(lastString, false))
+                        Timber.w( "out>>>${lastString.length} "+lastString )
+                    }
                     bigStr.clear() //Он отжил свое)
                     break
                 }

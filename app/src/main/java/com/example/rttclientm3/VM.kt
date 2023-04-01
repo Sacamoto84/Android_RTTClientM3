@@ -56,9 +56,11 @@ class VM : ViewModel() {
     }
 
     fun launchUIChanelRecive() {
-        viewModelScope.launch {
-            reciveUI()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            receiveUILastString()
         }
+
     }
 
     //Создание списка pairTextAndColor из исходного текста
@@ -79,31 +81,24 @@ class VM : ViewModel() {
         return pair
     }
 
-
-    private suspend fun reciveUI() = withContext(Dispatchers.IO) {
-
-        //channelCommand
-        //channelLastString
-
+    private suspend fun receiveUILastString() {
         while (true) {
-
-            var s = channelCommand.receive().cmd
-            if (isCheckedUseLiteralEnter.value) s += '⤵'
-            val pair = text_to_paitList(s)
-
+            val s = channelLastString.receive()
+            if(s.cmd == "") continue
+            if (isCheckedUseLiteralEnter.value) s.cmd += '⤵'
+            val pair = text_to_paitList(s.cmd)
             withContext(Dispatchers.Main)
             {
-                colorline_and_text.last().text = s
+                colorline_and_text.last().text = s.cmd
                 colorline_and_text.last().pairList = pair
                 manual_recomposeLazy.value =
                     manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
-                consoleAdd("") //Пустая строка
+                if (s.newString) consoleAdd("")
             }
-
         }
-
-
     }
+
+
 
 
 //    private suspend fun reciveUI() = withContext(Dispatchers.Main)

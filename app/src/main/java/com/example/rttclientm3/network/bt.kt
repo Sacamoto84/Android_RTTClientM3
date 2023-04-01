@@ -68,7 +68,7 @@ object bt {
     @OptIn(DelicateCoroutinesApi::class)
     fun autoconnect() {
         GlobalScope.launch(Dispatchers.IO) {
-            while(true) {
+            while (true) {
                 delay(1000)
                 if (btStatus == BTstatus.DISCONNECT) {
                     connect()
@@ -109,12 +109,18 @@ fun receiveScope() {
         } catch (e: IOException) {
             Timber.e("Ошибка создания inputStream")
         }
-        val buf = inStream?.bufferedReader(Charsets.UTF_8)
+        val buf = inStream?.reader(Charsets.UTF_8)
         while (true) {
             try {
                 if (buf != null) {
-                    val s = buf.read().toChar()
-                    channelNetworkIn.send(s.toString())
+                    var count = 0
+                    var s = ""
+                    while (buf.ready()) {
+                        s += buf.read().toChar()
+                        count++
+                    }
+                    if (s.isNotEmpty())
+                        channelNetworkIn.send(s)
                 }
             } catch (e: IOException) {
                 Timber.e("Ошибка в приеменом потоке ${e.message}")
