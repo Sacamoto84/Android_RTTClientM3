@@ -3,9 +3,7 @@ package com.example.rttclientm3
 import android.net.nsd.NsdServiceInfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rttclientm3.network.NetCommandDecoder
 import com.example.rttclientm3.network.UDP
-import com.example.rttclientm3.network.channelCommand
 import com.example.rttclientm3.network.channelLastString
 import com.example.rttclientm3.network.channelNetworkIn
 import com.example.rttclientm3.screen.consoleAdd
@@ -14,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 
 class VM : ViewModel() {
@@ -46,13 +45,6 @@ class VM : ViewModel() {
         val udp = UDP(8888, channelNetworkIn)
         viewModelScope.launch {
             udp.receiveScope()
-        }
-    }
-
-    fun launchDecoder() {
-        val decoder = NetCommandDecoder(channelNetworkIn, channelCommand, channelLastString)
-        viewModelScope.launch {
-            decoder.decodeScope()
         }
     }
 
@@ -106,6 +98,7 @@ class VM : ViewModel() {
 
             withContext(Dispatchers.Main)
             {
+                Timber.i("Ку ${channelLastString.isEmpty} ${colorline_and_text.size} ${colorline_and_text.last().text}")
                 manual_recomposeLazy.value = manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
             }
 

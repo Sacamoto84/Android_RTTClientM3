@@ -6,9 +6,8 @@ data class NetCommand(var cmd : String, var newString : Boolean =  false)
 
 
 //Канал передачи
-val channelNetworkIn = Channel<String>(1000000)
+val channelNetworkIn = Channel<String>(Channel.UNLIMITED)
 
-val channelCommand = Channel<String>(1000000) //Канал готовых команд
+val channelLastString = Channel<NetCommand>(Channel.UNLIMITED)
 
-val channelLastString = Channel<NetCommand>(1000000)
-
+val decoder = NetCommandDecoder(channelNetworkIn, channelLastString)

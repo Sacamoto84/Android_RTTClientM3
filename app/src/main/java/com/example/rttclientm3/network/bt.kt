@@ -115,7 +115,7 @@ fun receiveScope() {
         Timber.e("Ошибка создания inputStream")
     }
 
-    val buf = inStream?.reader(Charsets.UTF_8)?.buffered(1024 * 1024)
+    val buf = inStream?.reader(Charsets.UTF_8)?.buffered(1024 * 1024 * 8)
 
     var isExit = false
 
@@ -125,9 +125,7 @@ fun receiveScope() {
             try {
                 delay(1000)
                 outStream?.write(1)
-            }
-            catch (e: IOException)
-            {
+            } catch (e: IOException) {
                 isExit = true
                 break
             }
@@ -135,8 +133,8 @@ fun receiveScope() {
 
     }
 
-    GlobalScope.launch(Dispatchers.IO) {
 
+    GlobalScope.launch(Dispatchers.IO) {
 
         while (true) {
             try {
@@ -145,12 +143,17 @@ fun receiveScope() {
 
                 if (buf != null) {
                     var s = ""
-                    while (buf.ready()) {
+
+                    val startTime = System.currentTimeMillis()
+                    while (buf.ready() && s.length < (1024 * 16) && ((System.currentTimeMillis() - startTime) < 300)) {
                         s += buf.read().toChar()
+                        //Timber.d("Бее1 ${s.length}")
                     }
 
-                    if (s.isNotEmpty())
+                    if (s.isNotEmpty()) {
+                        //Timber.d("Бее2")
                         channelNetworkIn.send(s)
+                    }
                 } else {
                     Timber.e("buf == null")
                 }

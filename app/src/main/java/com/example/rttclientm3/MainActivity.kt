@@ -29,14 +29,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.rttclientm3.network.NetCommandDecoder
 import com.example.rttclientm3.network.bluetoothAdapter
 import com.example.rttclientm3.network.bluetoothManager
 import com.example.rttclientm3.network.bt
 import com.example.rttclientm3.network.btIsReady
-import com.example.rttclientm3.network.channelCommand
-import com.example.rttclientm3.network.channelLastString
-import com.example.rttclientm3.network.channelNetworkIn
+import com.example.rttclientm3.network.decoder
 import com.example.rttclientm3.screen.Web
 import com.example.rttclientm3.screen.consoleAdd
 import com.example.rttclientm3.screen.info
@@ -55,7 +52,7 @@ lateinit var shared: SharedPreferences
 
 lateinit var ipAddress: String
 
-
+var isInitialised = false
 
 
 class MainActivity : ComponentActivity() {
@@ -67,92 +64,102 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Timber.plant(DebugTree())
-        Timber.i("Привет")
+        if(!isInitialised) {
 
-        bluetoothManager = applicationContext.getSystemService(BluetoothManager::class.java)
-        bluetoothAdapter = bluetoothManager.adapter
+            Timber.plant(DebugTree())
+            Timber.i("Привет")
 
-        bt.getPairedDevices()
-        //bt.connect()
-        bt.autoconnect()
+            bluetoothManager = applicationContext.getSystemService(BluetoothManager::class.java)
+            bluetoothAdapter = bluetoothManager.adapter
 
-        contex = applicationContext
+            bt.getPairedDevices()
+            //bt.connect()
+            bt.autoconnect()
 
-        shared = getSharedPreferences("size", Context.MODE_PRIVATE)
-        console_text.value = shared.getString("size", "12")?.toInt()?.sp ?: 12.sp
+            contex = applicationContext
 
-        //MARK: Вывод символа энтер
-        isCheckedUseLiteralEnter.value = shared.getBoolean("enter", false)
+            shared = getSharedPreferences("size", Context.MODE_PRIVATE)
+            console_text.value = shared.getString("size", "12")?.toInt()?.sp ?: 12.sp
 
-        //MARK: Вывод номера строки
-        isCheckedUselineVisible.value = shared.getBoolean("lineVisible", true)
+            //MARK: Вывод символа энтер
+            isCheckedUseLiteralEnter.value = shared.getBoolean("enter", false)
 
-        //Создаем список цветов из Json цветов
-        colorJsonToList()
+            //MARK: Вывод номера строки
+            isCheckedUselineVisible.value = shared.getBoolean("lineVisible", true)
 
-        vm.launchUDPReceive()
-        //vm.launchDecoder()
+            //Создаем список цветов из Json цветов
+            colorJsonToList()
 
-        NetCommandDecoder(channelNetworkIn, channelCommand, channelLastString).run()
+            vm.launchUDPReceive()
+            //vm.launchDecoder()
 
-        //CommandDecoder(channelCommand, channelCommandOut).run()
+            decoder.run()
+
+            decoder.addCmd("pong") {
+
+            }
+
+            //CommandDecoder(channelCommand, channelCommandOut).run()
 
 
-        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
-        print(ipAddress)
+            val wifiManager =
+                applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
+            print(ipAddress)
 
 
-        //Нужно добавить ее в список лази как текущую
-        colorline_and_text.add(
-            lineTextAndColor(
-                text = "Первый нах",
-                pairList =
-                listOf<pairTextAndColor>(
-                    pairTextAndColor(
-                        text = " RTT ",
-                        colorText = Color(0xFFFFAA00),
-                        colorBg = Color(0xFF812C12),
-                    ),
-                    pairTextAndColor(
-                        text = " Terminal ",
-                        colorText = Color(0xFFC6D501),
-                        colorBg = Color(0xFF587C2F),
-                    ),
-                    pairTextAndColor(
-                        text = " v2.6.7 ",
-                        colorText = Color(0xFF00E2FF),
-                        colorBg = Color(0xFF334292),
-                    ),
-                    pairTextAndColor(
-                        text = ">",
-                        colorText = Color(0),
-                        colorBg = Color(0xFFFF0000),
-                    ),
-                    pairTextAndColor(
-                        text = "!",
-                        colorText = Color(0),
-                        colorBg = Color(0xFFFFCC00),
-
+            //Нужно добавить ее в список лази как текущую
+            colorline_and_text.add(
+                lineTextAndColor(
+                    text = "Первый нах",
+                    pairList =
+                    listOf<pairTextAndColor>(
+                        pairTextAndColor(
+                            text = " RTT ",
+                            colorText = Color(0xFFFFAA00),
+                            colorBg = Color(0xFF812C12),
                         ),
-                    pairTextAndColor(
-                        text = ">",
-                        colorText = Color(0),
-                        colorBg = Color(0xFF339900),
-
+                        pairTextAndColor(
+                            text = " Terminal ",
+                            colorText = Color(0xFFC6D501),
+                            colorBg = Color(0xFF587C2F),
                         ),
-                    pairTextAndColor(
-                        text = ">",
-                        colorText = Color(0),
-                        colorBg = Color(0xFF0033CC),
-                        flash = true
-                    ),
+                        pairTextAndColor(
+                            text = " v2.6.7 ",
+                            colorText = Color(0xFF00E2FF),
+                            colorBg = Color(0xFF334292),
+                        ),
+                        pairTextAndColor(
+                            text = ">",
+                            colorText = Color(0),
+                            colorBg = Color(0xFFFF0000),
+                        ),
+                        pairTextAndColor(
+                            text = "!",
+                            colorText = Color(0),
+                            colorBg = Color(0xFFFFCC00),
+
+                            ),
+                        pairTextAndColor(
+                            text = ">",
+                            colorText = Color(0),
+                            colorBg = Color(0xFF339900),
+
+                            ),
+                        pairTextAndColor(
+                            text = ">",
+                            colorText = Color(0),
+                            colorBg = Color(0xFF0033CC),
+                            flash = true
+                        ),
+                    )
                 )
             )
-        )
 
-        consoleAdd("") //Пустая строка
+            consoleAdd("") //Пустая строка
+        }
+
+        isInitialised = true
 
         setContent {
 
