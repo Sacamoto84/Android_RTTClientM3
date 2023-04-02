@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-
 class VM : ViewModel() {
 
     // Declare NsdHelper object for service discovery
@@ -98,7 +97,7 @@ class VM : ViewModel() {
 
             withContext(Dispatchers.Main)
             {
-                Timber.i("Ку ${channelLastString.isEmpty} ${colorline_and_text.size} ${colorline_and_text.last().text}")
+                //Timber.i("Ку ${channelLastString.isEmpty} ${colorline_and_text.size} ${colorline_and_text.last().text}")
                 manual_recomposeLazy.value = manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
             }
 

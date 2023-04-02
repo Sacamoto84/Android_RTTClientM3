@@ -34,7 +34,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.rttclientm3.R
 import com.example.rttclientm3.ScriptItemDraw
-import com.example.rttclientm3.bottomNavigationLazy
+import com.example.rttclientm3.BottomNavigationLazy
 import com.example.rttclientm3.colorline_and_text
 import com.example.rttclientm3.console_text
 import com.example.rttclientm3.isCheckedUselineVisible
@@ -206,7 +206,7 @@ fun lazy(navController: NavController, messages: MutableList<lineTextAndColor>) 
         }
 
         //Блок кнопок
-        bottomNavigationLazy(navController as NavHostController)
+        BottomNavigationLazy(navController as NavHostController)
     }
 }
 

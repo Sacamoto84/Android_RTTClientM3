@@ -54,7 +54,6 @@ lateinit var ipAddress: String
 
 var isInitialised = false
 
-
 class MainActivity : ComponentActivity() {
 
     private val vm: VM by viewModels()
@@ -99,14 +98,11 @@ class MainActivity : ComponentActivity() {
 
             }
 
-            //CommandDecoder(channelCommand, channelCommandOut).run()
-
 
             val wifiManager =
                 applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
             ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
             print(ipAddress)
-
 
             //Нужно добавить ее в список лази как текущую
             colorline_and_text.add(
@@ -125,7 +121,7 @@ class MainActivity : ComponentActivity() {
                             colorBg = Color(0xFF587C2F),
                         ),
                         pairTextAndColor(
-                            text = " v2.6.7 ",
+                            text = " v2.7.1 ",
                             colorText = Color(0xFF00E2FF),
                             colorBg = Color(0xFF334292),
                         ),

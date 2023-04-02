@@ -138,20 +138,14 @@ fun receiveScope() {
 
         while (true) {
             try {
-
                 if (isExit) throw IOException("Произошла ошибка ввода-вывода")
-
                 if (buf != null) {
                     var s = ""
-
                     val startTime = System.currentTimeMillis()
                     while (buf.ready() && s.length < (1024 * 16) && ((System.currentTimeMillis() - startTime) < 300)) {
                         s += buf.read().toChar()
-                        //Timber.d("Бее1 ${s.length}")
                     }
-
                     if (s.isNotEmpty()) {
-                        //Timber.d("Бее2")
                         channelNetworkIn.send(s)
                     }
                 } else {
@@ -172,7 +166,6 @@ fun receiveScope() {
     }
 
 }
-
 
 //fun sendMessage(byteArray: ByteArray) {
 //    try {

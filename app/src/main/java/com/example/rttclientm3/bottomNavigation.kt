@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,23 +25,25 @@ import libs.ipToBroadCast
 import libs.readIP
 import libs.sendUDP
 
-private val heghtHabigation = 50.dp
 private val colorBg = Color(0xFF1B1B1B)
 
 @Composable
-fun bottomNavigationLazy(navController: NavHostController) {
+fun BottomNavigationLazy(navController: NavHostController) {
+
     Box(
         Modifier
             .fillMaxWidth()
-            .height(heghtHabigation)
-            .background(colorBg), contentAlignment = Alignment.Center
+            .height(50.dp)
+            .background(colorBg),
+        contentAlignment = Alignment.Center,
     )
     {
 
         Row(
             Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             //По кнопке включаем слежение
@@ -60,34 +65,38 @@ fun bottomNavigationLazy(navController: NavHostController) {
                     lastCount = colorline_and_text.size
                 }
             ) {
-                Text(text = "${colorline_and_text.count{ it.pairList.isNotEmpty() }}")
+
+                manual_recomposeLazy.value
+                Text(text = "${colorline_and_text.size}")
             }
 
             //Кнопка сброса списка
+
             Spacer(modifier = Modifier.width(8.dp))
-            Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
-                modifier = Modifier.fillMaxHeight().weight(1f).padding(top = 8.dp, bottom = 8.dp),
+
+            IconButton(
+                modifier = Modifier.size(34.dp),
+                colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),
                 onClick = {
                     colorline_and_text.clear()
                     consoleAdd(" ")
-                    manual_recomposeLazy.value = manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
+                    manual_recomposeLazy.value = manual_recomposeLazy.value + 1
                 }
-            ) {
-                Text(
-                    text = "Очистка", color = Color.LightGray
+            )
+            {
+                Icon(
+                    painter = painterResource(R.drawable.eraser),
+                    tint = Color.LightGray,
+                    contentDescription = null
                 )
             }
 
             //Кнопка перегрузки контроллера
-            Spacer(modifier = Modifier.width(8.dp))
-            Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
-                modifier = Modifier
-                    .fillMaxHeight()
-                    //.width(110.dp)
-                    .weight(1f)
-                    .padding(top = 8.dp, bottom = 8.dp),
+            Spacer(modifier = Modifier.width(16.dp))
+
+            IconButton(
+                modifier = Modifier.size(34.dp),
+                colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),
                 onClick = {
                     val s =
                         sendUDP("Reset", ip = ipToBroadCast(readIP(contex = contex!!)), port = 8889)
@@ -102,35 +111,31 @@ fun bottomNavigationLazy(navController: NavHostController) {
                     }
                 }
             ) {
-                Text(
-                    text = "Сброс", color = Color.LightGray
+                Icon(
+                    painter = painterResource(R.drawable.reset),
+                    tint = Color.LightGray,
+                    contentDescription = null
                 )
+
             }
 
-
             //Кнопка
-            Spacer(modifier = Modifier.width(8.dp))
-            Button(
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF505050)),
-                modifier = Modifier
-                    .fillMaxHeight().background(if(btIsConnected) Color.Blue else Color.Transparent)
-                    //.width(110.dp)
-                    .weight(1f)
-                    .padding(top = 8.dp, bottom = 8.dp),
+            Spacer(modifier = Modifier.width(16.dp))
+            IconButton(
+                modifier = Modifier.size(34.dp),
+                colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),
                 onClick = {
-
                     navController.navigate("info")
-
                 }
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.three_dots),
+                    painter = painterResource(R.drawable.settings1),
                     tint = Color.LightGray,
                     contentDescription = null
                 )
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
         }
     }
