@@ -34,9 +34,9 @@ import com.example.rttclientm3.network.bluetoothManager
 import com.example.rttclientm3.network.bt
 import com.example.rttclientm3.network.btIsReady
 import com.example.rttclientm3.network.decoder
-import com.example.rttclientm3.screen.Web
-import com.example.rttclientm3.screen.consoleAdd
-import com.example.rttclientm3.screen.info
+import com.example.rttclientm3.screen.info.ScreenInfo
+import com.example.rttclientm3.screen.web.Web
+import com.example.rttclientm3.screen.lazy.consoleAdd
 import com.example.rttclientm3.ui.theme.RTTClientM3Theme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -246,7 +246,7 @@ private fun ButtonBluetooth() {
 @Composable
 fun home(navController: NavHostController) {
 
-    com.example.rttclientm3.screen.lazy(navController, colorline_and_text)
+    com.example.rttclientm3.screen.lazy.lazy(navController, colorline_and_text)
 
 //val pagerState = rememberPagerState()
 //    HorizontalPager(count = 2, state = pagerState, itemSpacing = 0.dp) { page ->
@@ -270,11 +270,11 @@ fun BuildNavGraph(navController: NavHostController) {
         }
 
         composable(route = "console") {
-            com.example.rttclientm3.screen.lazy(navController, colorline_and_text)
+            com.example.rttclientm3.screen.lazy.lazy(navController, colorline_and_text)
         }
 
         composable(route = "info") {
-            info(navController)
+            ScreenInfo(navController)
         }
 
         composable(route = "web") {

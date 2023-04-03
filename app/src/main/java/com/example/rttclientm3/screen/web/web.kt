@@ -1,4 +1,4 @@
-package com.example.rttclientm3.screen
+package com.example.rttclientm3.screen.web
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.border

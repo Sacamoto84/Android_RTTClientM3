@@ -1,4 +1,4 @@
-package com.example.rttclientm3.screen
+package com.example.rttclientm3.screen.info
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -18,6 +18,7 @@ import com.example.rttclientm3.ipAddress
 import com.example.rttclientm3.ipESP
 import com.example.rttclientm3.isCheckedUseLiteralEnter
 import com.example.rttclientm3.isCheckedUselineVisible
+import com.example.rttclientm3.screen.lazy.consoleAdd
 import com.example.rttclientm3.shared
 
 //MARK: Локальные дефайны
@@ -35,11 +36,8 @@ val boxSize = 32.dp
 //}
 
 
-
-
-
 @Composable
-fun info(navController: NavController) {
+fun ScreenInfo(navController: NavController) {
 
     val scrollState = rememberScrollState()
 
@@ -281,4 +279,6 @@ fun info(navController: NavController) {
         }
     }
 }
+
+
 

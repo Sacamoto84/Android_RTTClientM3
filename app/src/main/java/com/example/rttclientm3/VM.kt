@@ -6,13 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.rttclientm3.network.UDP
 import com.example.rttclientm3.network.channelLastString
 import com.example.rttclientm3.network.channelNetworkIn
-import com.example.rttclientm3.screen.consoleAdd
-import com.example.rttclientm3.screen.manual_recomposeLazy
+import com.example.rttclientm3.screen.lazy.consoleAdd
+import com.example.rttclientm3.screen.lazy.manual_recomposeLazy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class VM : ViewModel() {
 
