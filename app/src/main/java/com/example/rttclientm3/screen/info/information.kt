@@ -13,12 +13,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 import com.example.rttclientm3.colorIn256
+import com.example.rttclientm3.console
 import com.example.rttclientm3.console_text
 import com.example.rttclientm3.ipAddress
 import com.example.rttclientm3.ipESP
 import com.example.rttclientm3.isCheckedUseLiteralEnter
 import com.example.rttclientm3.isCheckedUseLineVisible
-import com.example.rttclientm3.screen.lazy.consoleAdd
 import com.example.rttclientm3.shared
 
 //MARK: Локальные дефайны
@@ -201,7 +201,7 @@ fun ScreenInfo(navController: NavController) {
                                         val iii = 12 + x * 2 + y * 8
                                         println("Изменение шрифта на $iii")
                                         console_text.value = iii.sp
-                                        consoleAdd("Изменение шрифта")
+                                        console.consoleAdd("Изменение шрифта")
                                         shared.edit().putString("size", "$iii").apply()
                                     }
                                 )

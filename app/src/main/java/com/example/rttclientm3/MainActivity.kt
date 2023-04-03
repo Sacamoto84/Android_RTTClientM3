@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.rttclientm3.network.bluetoothAdapter
 import com.example.rttclientm3.network.btIsReady
 import com.example.rttclientm3.screen.info.ScreenInfo
+import com.example.rttclientm3.screen.lazy.ScreenLazy
 import com.example.rttclientm3.screen.web.Web
 import com.example.rttclientm3.ui.theme.RTTClientM3Theme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -141,12 +142,6 @@ private fun ButtonBluetooth() {
 }
 
 
-@Composable
-fun home(navController: NavHostController) {
-
-    com.example.rttclientm3.screen.lazy.lazy(navController, colorline_and_text)
-
-}
 
 @Composable
 fun BuildNavGraph(navController: NavHostController) {
@@ -156,11 +151,7 @@ fun BuildNavGraph(navController: NavHostController) {
     ) {
 
         composable(route = "home") {
-            home(navController)
-        }
-
-        composable(route = "console") {
-            com.example.rttclientm3.screen.lazy.lazy(navController, colorline_and_text)
+            ScreenLazy(navController)
         }
 
         composable(route = "info") {

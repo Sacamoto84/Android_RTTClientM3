@@ -3,6 +3,7 @@ package com.example.rttclientm3
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.MutableLiveData
+import com.example.rttclientm3.screen.lazy.Console
 
 
 val isCheckedUseLiteralEnter = mutableStateOf(false) //MARK: Показывать в конце строки символ энтер
@@ -20,6 +21,9 @@ var ipBroadcast = "0.0.0.0"
 //IP адрес ESP
 var ipESP = "0.0.0.0"
 var isESPmDNSFinding = false //Признак тог что ip адрес есп найден
+
+
+val console = Console(colorline_and_text)
 
 
 

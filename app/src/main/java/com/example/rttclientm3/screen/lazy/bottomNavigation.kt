@@ -17,9 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.rttclientm3.R
 import com.example.rttclientm3.colorline_and_text
+import com.example.rttclientm3.console
 import com.example.rttclientm3.contex
 import com.example.rttclientm3.lastCount
 import com.example.rttclientm3.telnetSlegenie
@@ -30,7 +32,7 @@ import libs.lan.sendUDP
 private val colorBg = Color(0xFF1B1B1B)
 
 @Composable
-fun BottomNavigationLazy(navController: NavHostController) {
+fun BottomNavigationLazy(navController: NavController) {
 
     Box(
         Modifier
@@ -84,8 +86,7 @@ private fun ButtonSlegenie(modifier: Modifier = Modifier)
             lastCount = colorline_and_text.size
         }
     ) {
-
-        manual_recomposeLazy.value
+        console.recompose()
         Text(text = "${colorline_and_text.size}")
     }
 }
@@ -97,8 +98,8 @@ private fun ButtonClear() {
         colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),
         onClick = {
             colorline_and_text.clear()
-            consoleAdd(" ")
-            manual_recomposeLazy.value = manual_recomposeLazy.value + 1
+            console.consoleAdd(" ")
+            console.recompose()
         }
     )
     {
@@ -122,13 +123,13 @@ private fun ButtonReset() {
             val s =
                 sendUDP("Reset", ip = ipToBroadCast(readIP(context)), port = 8889)
             if (s == "OK") {
-                consoleAdd("Команда перезагрузки контроллера")
-                consoleAdd(" ")
+               console.consoleAdd("Команда перезагрузки контроллера")
+               console.consoleAdd(" ")
             } else {
                 if (s == "sendto failed: ENETUNREACH (Network is unreachable)")
-                    consoleAdd("Отсуствует Wifi сеть", color = Color.Red)
+                    console.consoleAdd("Отсуствует Wifi сеть", color = Color.Red)
                 else
-                    consoleAdd(s, color = Color.Red)
+                    console.consoleAdd(s, color = Color.Red)
             }
         }
     ) {
@@ -142,7 +143,7 @@ private fun ButtonReset() {
 }
 
 @Composable
-private fun ButtonSetting(navController: NavHostController) {
+private fun ButtonSetting(navController: NavController) {
     IconButton(
         modifier = Modifier.size(34.dp),
         colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),

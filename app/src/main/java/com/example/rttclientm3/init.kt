@@ -13,7 +13,6 @@ import com.example.rttclientm3.network.bluetoothManager
 import com.example.rttclientm3.network.bt
 import com.example.rttclientm3.network.channelNetworkIn
 import com.example.rttclientm3.network.decoder
-import com.example.rttclientm3.screen.lazy.consoleAdd
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -139,7 +138,7 @@ class Initialization(private val context: Context) {
                 )
             )
 
-            consoleAdd("") //Пустая строка
+            console.consoleAdd("") //Пустая строка
 
         }
 

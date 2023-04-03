@@ -2,7 +2,6 @@ package com.example.rttclientm3
 
 import android.util.Log
 import androidx.compose.ui.graphics.Color
-import com.example.rttclientm3.screen.lazy.consoleAdd
 import timber.log.Timber
 
 val allcolor = mutableListOf<Color>() //Палитра цветов по коду соответствие цвета
@@ -139,7 +138,7 @@ fun calculateColorInEscString(str: String) {
 
     if (str == "1") {
         colorline_and_text.clear()// removeRange(0, colorline_and_text.lastIndex)
-        consoleAdd(" ")
+        console.consoleAdd(" ")
         return
     }
 

@@ -1,13 +1,8 @@
 package com.example.rttclientm3
 
-import android.net.nsd.NsdServiceInfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rttclientm3.network.UDP
 import com.example.rttclientm3.network.channelLastString
-import com.example.rttclientm3.network.channelNetworkIn
-import com.example.rttclientm3.screen.lazy.consoleAdd
-import com.example.rttclientm3.screen.lazy.manual_recomposeLazy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -55,14 +50,14 @@ class VM : ViewModel() {
 
                 colorline_and_text.last().text = s.cmd
                 colorline_and_text.last().pairList = pair
-                if (s.newString) consoleAdd("")
+                if (s.newString) console.consoleAdd("")
 
             }
 
             withContext(Dispatchers.Main)
             {
                 //Timber.i("Ку ${channelLastString.isEmpty} ${colorline_and_text.size} ${colorline_and_text.last().text}")
-                manual_recomposeLazy.value = manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
+                console.recompose() //Для ручной композиции списка
             }
 
         }
