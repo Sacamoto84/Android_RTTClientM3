@@ -14,6 +14,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -23,8 +24,8 @@ import com.example.rttclientm3.contex
 import com.example.rttclientm3.lastCount
 import com.example.rttclientm3.telnetSlegenie
 import libs.ipToBroadCast
-import libs.readIP
-import libs.sendUDP
+import libs.lan.readIP
+import libs.lan.sendUDP
 
 private val colorBg = Color(0xFF1B1B1B)
 
@@ -111,12 +112,15 @@ private fun ButtonClear() {
 
 @Composable
 private fun ButtonReset() {
+
+    val context = LocalContext.current
+
     IconButton(
         modifier = Modifier.size(34.dp),
         colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),
         onClick = {
             val s =
-                sendUDP("Reset", ip = ipToBroadCast(readIP(contex = contex!!)), port = 8889)
+                sendUDP("Reset", ip = ipToBroadCast(readIP(context)), port = 8889)
             if (s == "OK") {
                 consoleAdd("Команда перезагрузки контроллера")
                 consoleAdd(" ")

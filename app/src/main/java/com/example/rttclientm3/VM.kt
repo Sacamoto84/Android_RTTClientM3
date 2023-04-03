@@ -49,7 +49,6 @@ class VM : ViewModel() {
     @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun receiveUILastString() {
         while (true) {
-            val listS = mutableListOf<String>()
 
             while (!channelLastString.isEmpty)
             {

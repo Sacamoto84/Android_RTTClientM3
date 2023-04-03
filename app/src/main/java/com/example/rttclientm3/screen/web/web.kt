@@ -24,7 +24,7 @@ import com.google.accompanist.web.WebView
 import com.google.accompanist.web.WebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 import kotlinx.coroutines.CoroutineScope
-import libs.lan.libLanPing
+import libs.lan.ping
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SetJavaScriptEnabled")
@@ -39,7 +39,7 @@ fun Web(navController: NavController) {
 
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
     val navigator = WebViewNavigator(coroutineScope)
-    val ping = remember { mutableStateOf(libLanPing(ip)) }
+    val ping = remember { mutableStateOf(ping(ip)) }
 
     val swipeRefreshState = rememberSwipeRefreshState(false)
 
@@ -48,7 +48,7 @@ fun Web(navController: NavController) {
         state = swipeRefreshState,
         onRefresh = {
             println("onRefresh")
-            ping.value = libLanPing(ip)
+            ping.value = ping(ip)
             navigator.reload()
         }
     ) {
@@ -78,7 +78,7 @@ fun Web(navController: NavController) {
                     }
                 )
             else
-                Text(text = "Отсуствует связь с $ip")
+                Text(text = "Отсутствует связь с $ip")
 
         }
 
