@@ -15,36 +15,10 @@ import kotlinx.coroutines.withContext
 
 class VM : ViewModel() {
 
-    // Declare NsdHelper object for service discovery
-    private val nsdHelper: NsdHelper? = object : NsdHelper(contex!!) {
-        override fun onNsdServiceResolved(service: NsdServiceInfo) {
-            // A new network service is available
-            // Put your custom logic here!!!
-        }
 
-        override fun onNsdServiceLost(service: NsdServiceInfo) {
-            // A network service is no longer available
-            // Put your custom logic here!!!
-        }
-    }
 
-    // Block that is run when the view model is created
-    init {
 
-        // Initialize DNS-SD service discovery
-        nsdHelper?.initializeNsd()
 
-        // Start looking for available audio channels in the network
-        nsdHelper?.discoverServices()
-
-    }
-
-    fun launchUDPReceive() {
-        val udp = UDP(8888, channelNetworkIn)
-        viewModelScope.launch {
-            udp.receiveScope()
-        }
-    }
 
     fun launchUIChanelRecive() {
 
@@ -90,9 +64,6 @@ class VM : ViewModel() {
                 if (s.newString) consoleAdd("")
 
             }
-
-
-
 
             withContext(Dispatchers.Main)
             {

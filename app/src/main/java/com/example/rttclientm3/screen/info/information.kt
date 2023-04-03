@@ -167,9 +167,9 @@ fun ScreenInfo(navController: NavController) {
                 colors = CardDefaults.outlinedCardColors(containerColor = Color.Gray)
             )
             {
-                Text(text = "IP адресс телефона $ipAddress", color = Color.White, modifier = Modifier.padding(start = 20.dp, top = 5.dp))
+                Text(text = "IP адрес телефона $ipAddress", color = Color.White, modifier = Modifier.padding(start = 20.dp, top = 5.dp))
                 val str = if (ipESP[0]=='/') ipESP.removePrefix("/") else ipESP
-                Text(text = "IP адресс esp.local   $str", color = Color.White, modifier = Modifier.padding(start = 20.dp, bottom = 5.dp))
+                Text(text = "IP адрес esp.local   $str", color = Color.White, modifier = Modifier.padding(start = 20.dp, bottom = 5.dp))
             }
 
             OutlinedCard(

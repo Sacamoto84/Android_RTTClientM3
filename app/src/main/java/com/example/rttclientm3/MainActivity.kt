@@ -40,6 +40,7 @@ import com.example.rttclientm3.screen.lazy.consoleAdd
 import com.example.rttclientm3.ui.theme.RTTClientM3Theme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.web.LoadingState
 import libs.KeepScreenOn
 import libs.ipToBroadCast
 import libs.readIP
@@ -52,7 +53,7 @@ lateinit var shared: SharedPreferences
 
 lateinit var ipAddress: String
 
-var isInitialised = false
+
 
 class MainActivity : ComponentActivity() {
 
@@ -63,46 +64,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(!isInitialised) {
 
-            Timber.plant(DebugTree())
-            Timber.i("Привет")
+        val ini = Initialization(applicationContext)
+        ini.init0()
 
-            bluetoothManager = applicationContext.getSystemService(BluetoothManager::class.java)
-            bluetoothAdapter = bluetoothManager.adapter
-
-            bt.getPairedDevices()
-            //bt.connect()
-            bt.autoconnect()
-
-            contex = applicationContext
-
-            shared = getSharedPreferences("size", Context.MODE_PRIVATE)
-            console_text.value = shared.getString("size", "12")?.toInt()?.sp ?: 12.sp
-
-            //MARK: Вывод символа энтер
-            isCheckedUseLiteralEnter.value = shared.getBoolean("enter", false)
-
-            //MARK: Вывод номера строки
-            isCheckedUselineVisible.value = shared.getBoolean("lineVisible", true)
-
-            //Создаем список цветов из Json цветов
-            colorJsonToList()
-
-            vm.launchUDPReceive()
-            //vm.launchDecoder()
-
-            decoder.run()
-
-            decoder.addCmd("pong") {
-
-            }
-
-
-            val wifiManager =
-                applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
-            print(ipAddress)
+        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        ipAddress = Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
+        print(ipAddress)
 
             //Нужно добавить ее в список лази как текущую
             colorline_and_text.add(
@@ -110,52 +78,21 @@ class MainActivity : ComponentActivity() {
                     text = "Первый нах",
                     pairList =
                     listOf<pairTextAndColor>(
-                        pairTextAndColor(
-                            text = " RTT ",
-                            colorText = Color(0xFFFFAA00),
-                            colorBg = Color(0xFF812C12),
-                        ),
-                        pairTextAndColor(
-                            text = " Terminal ",
-                            colorText = Color(0xFFC6D501),
-                            colorBg = Color(0xFF587C2F),
-                        ),
-                        pairTextAndColor(
-                            text = " v2.7.1 ",
-                            colorText = Color(0xFF00E2FF),
-                            colorBg = Color(0xFF334292),
-                        ),
-                        pairTextAndColor(
-                            text = ">",
-                            colorText = Color(0),
-                            colorBg = Color(0xFFFF0000),
-                        ),
-                        pairTextAndColor(
-                            text = "!",
-                            colorText = Color(0),
-                            colorBg = Color(0xFFFFCC00),
-
-                            ),
-                        pairTextAndColor(
-                            text = ">",
-                            colorText = Color(0),
-                            colorBg = Color(0xFF339900),
-
-                            ),
-                        pairTextAndColor(
-                            text = ">",
-                            colorText = Color(0),
-                            colorBg = Color(0xFF0033CC),
-                            flash = true
-                        ),
+                        pairTextAndColor( text = " RTT ", colorText = Color(0xFFFFAA00), colorBg = Color(0xFF812C12)),
+                        pairTextAndColor( text = " Terminal ", colorText = Color(0xFFC6D501), colorBg = Color(0xFF587C2F)),
+                        pairTextAndColor( text = " v2.7.1 ", colorText = Color(0xFF00E2FF), colorBg = Color(0xFF334292)),
+                        pairTextAndColor( text = ">", colorText = Color(0), colorBg = Color(0xFFFF0000)),
+                        pairTextAndColor( text = "!", colorText = Color(0), colorBg = Color(0xFFFFCC00)),
+                        pairTextAndColor( text = ">", colorText = Color(0), colorBg = Color(0xFF339900)),
+                        pairTextAndColor( text = ">", colorText = Color(0), colorBg = Color(0xFF0033CC), flash = true ),
                     )
                 )
             )
 
             consoleAdd("") //Пустая строка
-        }
 
-        isInitialised = true
+
+        ini.isInitialised = true
 
         setContent {
 
@@ -247,14 +184,6 @@ private fun ButtonBluetooth() {
 fun home(navController: NavHostController) {
 
     com.example.rttclientm3.screen.lazy.lazy(navController, colorline_and_text)
-
-//val pagerState = rememberPagerState()
-//    HorizontalPager(count = 2, state = pagerState, itemSpacing = 0.dp) { page ->
-//        when (page) {
-//            0 -> lazy(navController, colorline_and_text)
-//            1 -> info(navController)
-//        }
-//    }
 
 }
 
