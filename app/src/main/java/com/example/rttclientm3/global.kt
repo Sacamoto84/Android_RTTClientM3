@@ -4,13 +4,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.MutableLiveData
 
-//MARK: Показывать в конце строки символ энтер
-val isCheckedUseLiteralEnter = mutableStateOf(false)
 
-//MARK: Показывать номер строки
-val isCheckedUselineVisible = mutableStateOf(false)
+val isCheckedUseLiteralEnter = mutableStateOf(false) //MARK: Показывать в конце строки символ энтер
+val isCheckedUseLineVisible  = mutableStateOf(false) //MARK: Показывать номер строки
 
-var console_text = mutableStateOf( 12.sp )
+var console_text = mutableStateOf( 12.sp ) //Размер текста в консоли
 
 var telnetSlegenie = MutableLiveData<Boolean>(true)
 var telnetWarning = MutableLiveData<Boolean>(false) //Для отображения значка

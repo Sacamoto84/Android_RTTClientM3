@@ -17,7 +17,7 @@ import com.example.rttclientm3.console_text
 import com.example.rttclientm3.ipAddress
 import com.example.rttclientm3.ipESP
 import com.example.rttclientm3.isCheckedUseLiteralEnter
-import com.example.rttclientm3.isCheckedUselineVisible
+import com.example.rttclientm3.isCheckedUseLineVisible
 import com.example.rttclientm3.screen.lazy.consoleAdd
 import com.example.rttclientm3.shared
 
@@ -260,9 +260,9 @@ fun ScreenInfo(navController: NavController) {
                     //modifier = Modifier.background(Color.Red)
                 ) {
                     Checkbox(
-                        checked = isCheckedUselineVisible.value,
+                        checked = isCheckedUseLineVisible.value,
                         onCheckedChange = {
-                            isCheckedUselineVisible.value = it
+                            isCheckedUseLineVisible.value = it
                             shared.edit().putBoolean("lineVisible", it).apply()
                         },
                         colors = CheckboxDefaults.colors(uncheckedColor = Color.LightGray)

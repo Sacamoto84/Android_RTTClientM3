@@ -12,9 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -30,11 +27,11 @@ import com.example.rttclientm3.R
 import com.example.rttclientm3.ScriptItemDraw
 import com.example.rttclientm3.colorline_and_text
 import com.example.rttclientm3.console_text
-import com.example.rttclientm3.isCheckedUselineVisible
+import com.example.rttclientm3.isCheckedUseLineVisible
 import com.example.rttclientm3.lastCount
 import com.example.rttclientm3.lineTextAndColor
 import com.example.rttclientm3.pairTextAndColor
-import com.example.rttclientm3.screen.info.modifier.scrollbar
+import libs.modifier.scrollbar
 import com.example.rttclientm3.telnetSlegenie
 import com.example.rttclientm3.telnetWarning
 import kotlinx.coroutines.delay
@@ -115,7 +112,7 @@ fun lazy(navController: NavController, messages: MutableList<lineTextAndColor>) 
 
                             val s = item.pairList.size
 
-                            if ((s > 0) && (isCheckedUselineVisible.value)) {
+                            if ((s > 0) && (isCheckedUseLineVisible.value)) {
 
                                 val str: String = when (index) {
                                     in 0..9 -> String.format("   %d>", index)

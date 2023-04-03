@@ -66,7 +66,7 @@ class Initialization(private val context: Context) {
             isCheckedUseLiteralEnter.value = shared.getBoolean("enter", false)
 
             //MARK: Вывод номера строки
-            isCheckedUselineVisible.value = shared.getBoolean("lineVisible", true)
+            isCheckedUseLineVisible.value = shared.getBoolean("lineVisible", true)
 
             //Создаем список цветов из Json цветов
             colorJsonToList()
