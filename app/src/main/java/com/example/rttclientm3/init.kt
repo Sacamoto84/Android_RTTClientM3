@@ -23,26 +23,27 @@ import timber.log.Timber
 
 class Initialization(private val context: Context) {
 
-    // Declare NsdHelper object for service discovery
-    private val nsdHelper: NsdHelper = object : NsdHelper(contex!!) {
-        override fun onNsdServiceResolved(service: NsdServiceInfo) {
-            // A new network service is available
-            // Put your custom logic here!!!
-        }
-
-        override fun onNsdServiceLost(service: NsdServiceInfo) {
-            // A network service is no longer available
-            // Put your custom logic here!!!
-        }
-    }
-
-
     var isInitialised = false
 
-    fun isInitialised(i : Boolean)
-    {
-        isInitialised = i
+    private var nsdHelper: NsdHelper? = null
+
+    init {
+
+        // Declare NsdHelper object for service discovery
+        nsdHelper = object : NsdHelper(context) {
+            override fun onNsdServiceResolved(service: NsdServiceInfo) {
+                // A new network service is available
+                // Put your custom logic here!!!
+            }
+
+            override fun onNsdServiceLost(service: NsdServiceInfo) {
+                // A network service is no longer available
+                // Put your custom logic here!!!
+            }
+        }
+
     }
+
 
     @OptIn(DelicateCoroutinesApi::class)
     fun init0() {
@@ -71,10 +72,10 @@ class Initialization(private val context: Context) {
             colorJsonToList()
 
             // Initialize DNS-SD service discovery
-            nsdHelper.initializeNsd()
+            nsdHelper?.initializeNsd()
 
             // Start looking for available audio channels in the network
-            nsdHelper.discoverServices()
+            nsdHelper?.discoverServices()
 
             ipAddress = readIP(context)
             print(ipAddress)
@@ -86,36 +87,65 @@ class Initialization(private val context: Context) {
                 udp.receiveScope()
             }
 
-
             decoder.run()
             decoder.addCmd("pong") {
 
+            }
 
-                //Нужно добавить ее в список лази как текущую
-                colorline_and_text.add(
-                    lineTextAndColor(
-                        text = "Первый нах",
-                        pairList =
-                        listOf<pairTextAndColor>(
-                            pairTextAndColor( text = " RTT ", colorText = Color(0xFFFFAA00), colorBg = Color(0xFF812C12)),
-                            pairTextAndColor( text = " Terminal ", colorText = Color(0xFFC6D501), colorBg = Color(0xFF587C2F)),
-                            pairTextAndColor( text = " $version ", colorText = Color(0xFF00E2FF), colorBg = Color(0xFF334292)),
-                            pairTextAndColor( text = ">", colorText = Color(0), colorBg = Color(0xFFFF0000)),
-                            pairTextAndColor( text = "!", colorText = Color(0), colorBg = Color(0xFFFFCC00)),
-                            pairTextAndColor( text = ">", colorText = Color(0), colorBg = Color(0xFF339900)),
-                            pairTextAndColor( text = ">", colorText = Color(0), colorBg = Color(0xFF0033CC), flash = true ),
+
+            //Нужно добавить ее в список лази как текущую
+            colorline_and_text.add(
+                lineTextAndColor(
+                    text = "Первый нах",
+                    pairList =
+                    listOf<pairTextAndColor>(
+                        pairTextAndColor(
+                            text = " RTT ",
+                            colorText = Color(0xFFFFAA00),
+                            colorBg = Color(0xFF812C12)
+                        ),
+                        pairTextAndColor(
+                            text = " Terminal ",
+                            colorText = Color(0xFFC6D501),
+                            colorBg = Color(0xFF587C2F)
+                        ),
+                        pairTextAndColor(
+                            text = " $version ",
+                            colorText = Color(0xFF00E2FF),
+                            colorBg = Color(0xFF334292)
+                        ),
+                        pairTextAndColor(
+                            text = ">",
+                            colorText = Color(0),
+                            colorBg = Color(0xFFFF0000)
+                        ),
+                        pairTextAndColor(
+                            text = "!",
+                            colorText = Color(0),
+                            colorBg = Color(0xFFFFCC00)
+                        ),
+                        pairTextAndColor(
+                            text = ">",
+                            colorText = Color(0),
+                            colorBg = Color(0xFF339900)
+                        ),
+                        pairTextAndColor(
+                            text = ">",
+                            colorText = Color(0),
+                            colorBg = Color(0xFF0033CC),
+                            flash = true
                         )
                     )
                 )
+            )
 
-                consoleAdd("") //Пустая строка
-
-            }
-
-            isInitialised = true
+            consoleAdd("") //Пустая строка
 
         }
 
+        isInitialised = true
 
     }
+
+
 }

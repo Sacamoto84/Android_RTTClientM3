@@ -36,15 +36,12 @@ import libs.ipToBroadCast
 import libs.lan.readIP
 import timber.log.Timber.*
 
-
 var contex: Context? = null
 lateinit var shared: SharedPreferences
 
 lateinit var ipAddress: String
 
-
-const val version = "v2.7.1"
-
+const val version = "v2.7.3"
 
 class MainActivity : ComponentActivity() {
 

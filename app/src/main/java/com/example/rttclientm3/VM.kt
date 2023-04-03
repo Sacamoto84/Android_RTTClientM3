@@ -15,11 +15,6 @@ import kotlinx.coroutines.withContext
 
 class VM : ViewModel() {
 
-
-
-
-
-
     fun launchUIChanelRecive() {
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -72,77 +67,5 @@ class VM : ViewModel() {
 
         }
     }
-
-
-
-
-//    private suspend fun reciveUI() = withContext(Dispatchers.Main)
-//    {
-//        val bigStr: StringBuilder = StringBuilder()//Большая строка в которую и складируются данные с канала
-//
-//        while (true) {
-//
-//            val string = channelNetworkIn.receive() //Получить строку с канала, сможет соделжать несколько строк
-//            bigStr.append(string) //Захерячиваем в большую строку
-//
-//            val stringCorrection = string.replace('\n', '▒')
-//            //println("!reciveUI!>>Из канала>>$string")
-//            //println("!reciveUI!>>Из канала Коррекция>>$stringCorrection")
-//            //println("!reciveUI!>>BigStr>>$bigStr")
-//            //println("!reciveUI! Есть \\n = ${bigStr.indexOf('\n')} Длинна ${bigStr.length}")
-//
-//            val strList = mutableListOf<String>()
-//
-//            //MARK: Будем сами делить на строки
-//            do {
-//                //Индекс \n
-//                val indexN = bigStr.indexOf('\n')
-//
-//                if (indexN != -1) {
-//                    //Область по любому имет конец строки
-//                    //MARK: Чета есть, копируем в подстроку
-//                    val stringDoN = bigStr.substring(0, indexN)
-//                    bigStr.delete(0, bigStr.indexOf('\n') + 1)
-//                    strList.add(stringDoN)
-//
-//                    //MARK: Тут для дополнения прошлой строки
-//                    //Получить полную запись посленней строки
-//                    colorline_and_text.last().text += stringDoN
-//
-//                    if (isCheckedUseLiteralEnter.value) colorline_and_text.last().text += '⤵'
-//
-//                    //println("!reciveUI! Старая строка >>${colorline_and_text.last().text}")
-//
-//                    //Создать список из строки основе текста
-//                    val pair = text_to_paitList(colorline_and_text.last().text)
-//                    colorline_and_text.last().pairList = pair
-//
-//                    manual_recomposeLazy.value = manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
-//
-//                    consoleAdd("") //Пустая строка
-//
-//                } else {
-//
-//                    //MARK: Тут для дополнения прошлой строки
-//                    //Получить полную запись посленней строки
-//                    colorline_and_text.last().text += bigStr
-//                    bigStr.clear() //Он отжил свое)
-//
-//                    //println("!reciveUI! Старая строка >>${colorline_and_text.last().text}")
-//
-//                    //Создать список из строки основе текста
-//                    val pair = text_to_paitList(colorline_and_text.last().text)
-//                    colorline_and_text.last().pairList = pair
-//
-//                    manual_recomposeLazy.value =
-//                        manual_recomposeLazy.value + 1 //Для ручной рекомпозиции списка
-//
-//                    break
-//                }
-//            } while (true)
-//
-//
-//        }
-//    }
 
 }
