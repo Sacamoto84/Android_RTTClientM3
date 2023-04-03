@@ -18,10 +18,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import libs.console.LineTextAndColor
 
 @Composable
-fun ScriptItemDraw(item: () -> lineTextAndColor, index: () -> Int, select: () -> Boolean) {
+fun ScriptItemDraw(item: () -> LineTextAndColor, index: () -> Int, select: () -> Boolean) {
 
     println("Draw  ${index()}")
 
@@ -37,7 +37,7 @@ fun ScriptItemDraw(item: () -> lineTextAndColor, index: () -> Int, select: () ->
 
 }
 
-private fun convertStringToAnnotatedString(item: lineTextAndColor, index: Int): AnnotatedString {
+private fun convertStringToAnnotatedString(item: LineTextAndColor, index: Int): AnnotatedString {
 
     val s = item.pairList.size
 

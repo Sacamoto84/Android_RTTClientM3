@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import libs.console.PairTextAndColor
 
 class VM : ViewModel() {
 
@@ -19,8 +20,8 @@ class VM : ViewModel() {
     }
 
     //Создание списка pairTextAndColor из исходного текста
-    private fun text_to_paitList(txt: String): List<pairTextAndColor> {
-        val pair: MutableList<pairTextAndColor> = arrayListOf()
+    private fun text_to_paitList(txt: String): List<PairTextAndColor> {
+        val pair: MutableList<PairTextAndColor> = arrayListOf()
         //замена [ на \u001C это и будет новый разделитель
         val str = txt.replace("\u001B", "\u001C\u001B")
         val list = str.split("\u001C") //Разделить по 1C чтобы сохранить [

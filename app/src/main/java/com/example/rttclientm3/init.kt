@@ -17,12 +17,14 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import libs.console.LineTextAndColor
+import libs.console.PairTextAndColor
 import libs.lan.readIP
 import timber.log.Timber
 
 class Initialization(private val context: Context) {
 
-    var isInitialised = false
+    private var isInitialised = false
 
     private var nsdHelper: NsdHelper? = null
 
@@ -42,7 +44,6 @@ class Initialization(private val context: Context) {
         }
 
     }
-
 
     @OptIn(DelicateCoroutinesApi::class)
     fun init0() {
@@ -94,41 +95,41 @@ class Initialization(private val context: Context) {
 
             //Нужно добавить ее в список лази как текущую
             colorline_and_text.add(
-                lineTextAndColor(
+                LineTextAndColor(
                     text = "Первый нах",
                     pairList =
-                    listOf<pairTextAndColor>(
-                        pairTextAndColor(
+                    listOf<PairTextAndColor>(
+                        PairTextAndColor(
                             text = " RTT ",
                             colorText = Color(0xFFFFAA00),
                             colorBg = Color(0xFF812C12)
                         ),
-                        pairTextAndColor(
+                        PairTextAndColor(
                             text = " Terminal ",
                             colorText = Color(0xFFC6D501),
                             colorBg = Color(0xFF587C2F)
                         ),
-                        pairTextAndColor(
+                        PairTextAndColor(
                             text = " $version ",
                             colorText = Color(0xFF00E2FF),
                             colorBg = Color(0xFF334292)
                         ),
-                        pairTextAndColor(
+                        PairTextAndColor(
                             text = ">",
                             colorText = Color(0),
                             colorBg = Color(0xFFFF0000)
                         ),
-                        pairTextAndColor(
+                        PairTextAndColor(
                             text = "!",
                             colorText = Color(0),
                             colorBg = Color(0xFFFFCC00)
                         ),
-                        pairTextAndColor(
+                        PairTextAndColor(
                             text = ">",
                             colorText = Color(0),
                             colorBg = Color(0xFF339900)
                         ),
-                        pairTextAndColor(
+                        PairTextAndColor(
                             text = ">",
                             colorText = Color(0),
                             colorBg = Color(0xFF0033CC),

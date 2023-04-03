@@ -1,7 +1,7 @@
 package com.example.rttclientm3
 
-import android.util.Log
 import androidx.compose.ui.graphics.Color
+import libs.console.PairTextAndColor
 import timber.log.Timber
 
 val allcolor = mutableListOf<Color>() //Палитра цветов по коду соответствие цвета
@@ -16,22 +16,11 @@ var currentTextItalic = false
 var currentTextUnderline = false
 var currentTextFlash = false   //Мигание
 
-data class pairTextAndColor(
-    var text: String,
-    var colorText: Color,
-    var colorBg: Color,
-    var bold: Boolean = false,
-    var italic: Boolean = false,
-    var underline: Boolean = false,
-    var flash: Boolean = false
-)
 
-data class lineTextAndColor(
-    var text: String, //Строка вообще
-    var pairList: List<pairTextAndColor> //То что будет отрендеренно в этой строке
-)
 
-val colorline_and_text = mutableListOf<lineTextAndColor>()
+
+
+
 
 //Json цвета в палитру allcolor
 fun colorJsonToList() {
@@ -52,9 +41,9 @@ fun colorIn256(index: Int): Color {
 }
 
 //Получаем строку
-fun stringcalculate(text: String): List<pairTextAndColor> {
+fun stringcalculate(text: String): List<PairTextAndColor> {
     var str = text
-    val listPair = mutableListOf<pairTextAndColor>()
+    val listPair = mutableListOf<PairTextAndColor>()
 
     //Ищем есть ли знак ESC в строке
     val indexESC = str.indexOf('\u001b')
@@ -62,7 +51,7 @@ fun stringcalculate(text: String): List<pairTextAndColor> {
     //Ничего не нашли
     if (indexESC == -1) {
         listPair.add(
-            pairTextAndColor(
+            PairTextAndColor(
                 text = str,
                 colorText = currentTextColor,
                 colorBg = currentBgColor,
@@ -80,7 +69,7 @@ fun stringcalculate(text: String): List<pairTextAndColor> {
             {
                 //Нет хвоста должен быть в следующем пакете
                 listPair.add(
-                    pairTextAndColor(
+                    PairTextAndColor(
                         text = str,
                         colorText = currentTextColor,
                         colorBg = currentBgColor,
@@ -100,7 +89,7 @@ fun stringcalculate(text: String): List<pairTextAndColor> {
                     val subsring = str.substringBefore('\u001b')
 
                     listPair.add(
-                        pairTextAndColor(
+                        PairTextAndColor(
                             text = subsring,
                             colorText = currentTextColor,
                             colorBg = currentBgColor,
@@ -168,7 +157,7 @@ fun calculateColorInEscString(str: String) {
             str1 = str1.replace(matchResult.value, "")
         }
     } catch (e: Exception) {
-        Log.e("calculateColorInEsc", "Ошибка блока 1")
+        Timber.tag("calculateColorInEsc").e("Ошибка блока 1")
     }
 
     //MARK: Bold
