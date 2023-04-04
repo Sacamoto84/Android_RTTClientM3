@@ -126,7 +126,7 @@ fun calculateColorInEscString(str: String) {
     }
 
     if (str == "1") {
-        colorline_and_text.clear()// removeRange(0, colorline_and_text.lastIndex)
+        console.messages.clear()// removeRange(0, colorline_and_text.lastIndex)
         console.consoleAdd(" ")
         return
     }

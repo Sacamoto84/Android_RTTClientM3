@@ -18,7 +18,6 @@ import com.example.rttclientm3.console_text
 import com.example.rttclientm3.ipAddress
 import com.example.rttclientm3.ipESP
 import com.example.rttclientm3.isCheckedUseLiteralEnter
-import com.example.rttclientm3.isCheckedUseLineVisible
 import com.example.rttclientm3.shared
 
 //MARK: Локальные дефайны
@@ -242,9 +241,9 @@ fun ScreenInfo(navController: NavController) {
 
 
                     Checkbox(
-                        checked = isCheckedUseLiteralEnter.value,
+                        checked = isCheckedUseLiteralEnter,
                         onCheckedChange = {
-                            isCheckedUseLiteralEnter.value = it
+                            isCheckedUseLiteralEnter = it
                             shared.edit().putBoolean("enter", it).apply()
                         },
                         colors = CheckboxDefaults.colors(uncheckedColor = Color.LightGray)
@@ -260,9 +259,9 @@ fun ScreenInfo(navController: NavController) {
                     //modifier = Modifier.background(Color.Red)
                 ) {
                     Checkbox(
-                        checked = isCheckedUseLineVisible.value,
+                        checked = console.lineVisible,
                         onCheckedChange = {
-                            isCheckedUseLineVisible.value = it
+                            console.lineVisible = it
                             shared.edit().putBoolean("lineVisible", it).apply()
                         },
                         colors = CheckboxDefaults.colors(uncheckedColor = Color.LightGray)

@@ -63,10 +63,10 @@ class Initialization(private val context: Context) {
             console_text.value = shared.getString("size", "12")?.toInt()?.sp ?: 12.sp
 
             //MARK: Вывод символа энтер
-            isCheckedUseLiteralEnter.value = shared.getBoolean("enter", false)
+            isCheckedUseLiteralEnter = shared.getBoolean("enter", false)
 
             //MARK: Вывод номера строки
-            isCheckedUseLineVisible.value = shared.getBoolean("lineVisible", true)
+            console.lineVisible = shared.getBoolean("lineVisible", true)
 
             //Создаем список цветов из Json цветов
             colorJsonToList()
@@ -94,7 +94,7 @@ class Initialization(private val context: Context) {
 
 
             //Нужно добавить ее в список лази как текущую
-            colorline_and_text.add(
+            console.messages.add(
                 LineTextAndColor(
                     text = "Первый нах",
                     pairList =

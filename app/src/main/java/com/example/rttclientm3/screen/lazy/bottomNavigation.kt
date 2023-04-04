@@ -1,7 +1,16 @@
 package com.example.rttclientm3.screen.lazy
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -18,12 +27,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.example.rttclientm3.R
-import com.example.rttclientm3.colorline_and_text
 import com.example.rttclientm3.console
-import com.example.rttclientm3.contex
-import com.example.rttclientm3.lastCount
 import com.example.rttclientm3.telnetSlegenie
 import libs.ipToBroadCast
 import libs.lan.readIP
@@ -42,7 +47,6 @@ fun BottomNavigationLazy(navController: NavController) {
         contentAlignment = Alignment.Center,
     )
     {
-
         Row(
             Modifier
                 .fillMaxWidth(),
@@ -58,7 +62,6 @@ fun BottomNavigationLazy(navController: NavController) {
             Spacer(modifier = Modifier.width(16.dp))
             ButtonSetting(navController)
             Spacer(modifier = Modifier.width(16.dp))
-
         }
     }
 }
@@ -81,13 +84,12 @@ private fun ButtonSlegenie(modifier: Modifier = Modifier)
             containerColor = if (slegenie == true) Color(0xFF8AAF4A) else Color.DarkGray
         ),
         onClick = {
-            telnetSlegenie.value =
-                !telnetSlegenie.value!!
-            lastCount = colorline_and_text.size
+            telnetSlegenie.value = !telnetSlegenie.value!!
+            console.lastCount = console.messages.size
         }
     ) {
         console.recompose()
-        Text(text = "${colorline_and_text.size}")
+        Text(text = "${ console.messages.size }")
     }
 }
 
@@ -97,7 +99,7 @@ private fun ButtonClear() {
         modifier = Modifier.size(34.dp),
         colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),
         onClick = {
-            colorline_and_text.clear()
+            console.messages.clear()
             console.consoleAdd(" ")
             console.recompose()
         }

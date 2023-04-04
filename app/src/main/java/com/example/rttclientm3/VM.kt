@@ -43,16 +43,13 @@ class VM : ViewModel() {
 
             while (!channelLastString.isEmpty)
             {
-
                 val s = channelLastString.receive()
                 if(s.cmd == "") continue
-                if (isCheckedUseLiteralEnter.value) s.cmd += '⤵'
+                if (isCheckedUseLiteralEnter) s.cmd += '⤵'
                 val pair = text_to_paitList(s.cmd)
-
-                colorline_and_text.last().text = s.cmd
-                colorline_and_text.last().pairList = pair
+                console.messages.last().text = s.cmd
+                console.messages.last().pairList = pair
                 if (s.newString) console.consoleAdd("")
-
             }
 
             withContext(Dispatchers.Main)
