@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
-import android.bluetooth.BluetoothProfile
 import android.bluetooth.BluetoothSocket
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,7 +35,7 @@ lateinit var bluetoothAdapter: BluetoothAdapter
 private lateinit var esp32device: BluetoothDevice
 
 private var mSocket: BluetoothSocket? = null
-private const val uuid = "00001101-0000-1000-8000-00805F9B34FB"
+private const val uuid: String = "00001101-0000-1000-8000-00805F9B34FB"
 
 
 object bt {
@@ -54,7 +53,7 @@ object bt {
         esp32device = pairedDevices.first { it.name == "ESP32" }
     }
 
-    fun connect() {
+    private fun connect() {
 
         if (bluetoothAdapter.isEnabled) {
             btStatus = BTstatus.CONNECTING

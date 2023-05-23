@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.MutableLiveData
 import libs.console.Console
-import libs.console.LineTextAndColor
 
 var isCheckedUseLiteralEnter by mutableStateOf(false) //MARK: Показывать в конце строки символ энтер
 //val isCheckedUseLineVisible  = mutableStateOf(false) //MARK: Показывать номер строки

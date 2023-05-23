@@ -30,7 +30,7 @@ import androidx.navigation.NavController
 import com.example.rttclientm3.R
 import com.example.rttclientm3.console
 import com.example.rttclientm3.telnetSlegenie
-import libs.ipToBroadCast
+import libs.lan.ipToBroadCast
 import libs.lan.readIP
 import libs.lan.sendUDP
 

@@ -2,21 +2,19 @@ package com.example.rttclientm3
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import libs.console.PairTextAndColor
 import com.example.rttclientm3.network.channelLastString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import libs.console.PairTextAndColor
 
 class VM : ViewModel() {
 
     fun launchUIChanelRecive() {
-
         viewModelScope.launch(Dispatchers.IO) {
             receiveUILastString()
         }
-
     }
 
     //Создание списка pairTextAndColor из исходного текста
@@ -31,7 +29,7 @@ class VM : ViewModel() {
             } else {
                 //println("!text_to_paitList! split по ESC >>$str1")
                 val p = stringcalculate(str1)
-                pair += p//Создаем список пар для одной строки
+                pair.addAll(p)//Создаем список пар для одной строки
             }
         }
         return pair

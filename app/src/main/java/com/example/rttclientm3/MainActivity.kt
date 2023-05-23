@@ -3,7 +3,6 @@ package com.example.rttclientm3
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -33,16 +32,13 @@ import com.example.rttclientm3.ui.theme.RTTClientM3Theme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import libs.KeepScreenOn
-import libs.ipToBroadCast
+import libs.lan.ipToBroadCast
 import libs.lan.readIP
 import timber.log.Timber.*
 
-var contex: Context? = null
 lateinit var shared: SharedPreferences
 
 lateinit var ipAddress: String
-
-const val version = "v2.7.3"
 
 class MainActivity : ComponentActivity() {
 
@@ -84,19 +80,30 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                if (bluetoothPermissions.allPermissionsGranted) {
-                    btIsReady
-                    if (bluetoothAdapter.isEnabled) {
-                        Surface(
-                            modifier = Modifier.fillMaxSize(),
-                            color = MaterialTheme.colorScheme.background
-                        ) {
-                            BuildNavGraph(navController)
-                        }
-                    } else {
-                        ButtonBluetooth()
-                    }
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    BuildNavGraph(navController)
                 }
+
+//                if (bluetoothPermissions.allPermissionsGranted) {
+//                    btIsReady
+//                    if (bluetoothAdapter.isEnabled) {
+//
+//                        Surface(
+//                            modifier = Modifier.fillMaxSize(),
+//                            color = MaterialTheme.colorScheme.background
+//                        ) {
+//                            BuildNavGraph(navController)
+//                        }
+//
+//                    } else {
+//
+//                        ButtonBluetooth()
+//
+//                    }
+//                }
 
 
             }
@@ -140,7 +147,6 @@ private fun ButtonBluetooth() {
 
 
 }
-
 
 
 @Composable
