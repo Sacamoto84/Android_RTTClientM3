@@ -1,25 +1,20 @@
 package com.example.rttclientm3
 
-import android.bluetooth.BluetoothManager
 import android.content.Context
-import android.content.pm.PackageManager
 import android.net.nsd.NsdServiceInfo
-import android.os.Build
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
-import libs.console.LineTextAndColor
-import libs.console.PairTextAndColor
+import com.example.rttclientm3.network.BT
 import com.example.rttclientm3.network.UDP
-import com.example.rttclientm3.network.bluetoothAdapter
-import com.example.rttclientm3.network.bluetoothManager
 import com.example.rttclientm3.network.channelNetworkIn
 import com.example.rttclientm3.network.decoder
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import libs.lan.readIP
+import libs.console.LineTextAndColor
+import libs.console.PairTextAndColor
+import libs.lan.readLocalIP
 import timber.log.Timber
 
 
@@ -55,16 +50,9 @@ class Initialization(private val context: Context) {
             Timber.plant(Timber.DebugTree())
             Timber.i("Привет")
 
-            bluetoothManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                context.getSystemService(BluetoothManager::class.java)
-            } else {
-                ContextCompat.getSystemService( context, BluetoothManager::class.java)!!
-            }
-
-            bluetoothAdapter = bluetoothManager.adapter
-            //bt.getPairedDevices()
-            //bt.autoconnect()
-
+            BT.init(context)
+            BT.getPairedDevices()
+            BT.autoconnect(context)
 
             shared = context.getSharedPreferences("size", Context.MODE_PRIVATE)
             console_text.value = shared.getString("size", "12")?.toInt()?.sp ?: 12.sp
@@ -84,8 +72,8 @@ class Initialization(private val context: Context) {
             // Start looking for available audio channels in the network
             nsdHelper?.discoverServices()
 
-            ipAddress = readIP(context)
-            print(ipAddress)
+            ipAddress = readLocalIP(context)
+            Timber.i(ipAddress)
 
             val udp = UDP(8888, channelNetworkIn)
             GlobalScope.launch(
@@ -94,10 +82,12 @@ class Initialization(private val context: Context) {
                 udp.receiveScope()
             }
 
+
             decoder.run()
             decoder.addCmd("pong") {
 
             }
+
 
 
             val version = BuildConfig.VERSION_NAME

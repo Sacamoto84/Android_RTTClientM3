@@ -9,8 +9,14 @@ import timber.log.Timber
 
 class NetCommandDecoder(
     private val channelIn: Channel<String>,               //Входной канал от bt и wifi
-    private val channelOutLastString: Channel<NetCommand> //Для Отображения списка текст.новая строка
+    private val channelOutNetCommand: Channel<NetCommand> //Для Отображения списка текст.новая строка
 ) {
+
+    /**
+     * # Добавить команду
+     */
+    fun addCmd(name: String, cb: (List<String>) -> Unit = { }) = cmdList.add(CliCommand(name, cb))
+
 
     private var lastString: String = "" //Прошлая строка
     private val channelRoute = Channel<String>(1000000)
@@ -18,21 +24,9 @@ class NetCommandDecoder(
     @OptIn(DelicateCoroutinesApi::class)
     fun run() {
         Timber.i("Запуск декодировщика")
-
-        GlobalScope.launch(Dispatchers.IO) {
-            decodeScope()
-        }
-
-        GlobalScope.launch(Dispatchers.IO)
-        {
-            commandDecoder()
-        }
-
-        GlobalScope.launch(Dispatchers.IO)
-        {
-            cliDecoder()
-        }
-
+        GlobalScope.launch(Dispatchers.IO) { decodeScope() }
+        GlobalScope.launch(Dispatchers.IO) { commandDecoder() }
+        GlobalScope.launch(Dispatchers.IO) { cliDecoder() }
     }
 
     private suspend fun decodeScope() {
@@ -66,7 +60,7 @@ class NetCommandDecoder(
 
                     lastString += stringDoN
                     channelRoute.send(lastString)
-                    channelOutLastString.send(NetCommand(lastString, true))
+                    channelOutNetCommand.send(NetCommand(lastString, true))
                     //Timber.i( "out>>>${lastString.length} "+lastString )
                     lastString = ""
 
@@ -77,7 +71,7 @@ class NetCommandDecoder(
                     //Получить полную запись посленней строки
                     lastString += bigStr
                     if (lastString.isNotEmpty()) {
-                        channelOutLastString.send(NetCommand(lastString, false))
+                        channelOutNetCommand.send(NetCommand(lastString, false))
                         //Timber.w( "out>>>${lastString.length} "+lastString )
                     }
                     bigStr.clear() //Он отжил свое)
@@ -178,7 +172,9 @@ class NetCommandDecoder(
     //Перевод на сет
     private val cmdList = mutableListOf<CliCommand>() //Список команд
 
-    fun addCmd(name: String, cb: (List<String>) -> Unit = { }) = cmdList.add(CliCommand(name, cb))
+
+
+
 
     private suspend fun cliDecoder() {
         while (true) {
@@ -187,7 +183,7 @@ class NetCommandDecoder(
         }
     }
 
-    fun parse(str: String) {
+    private fun parse(str: String) {
         if (str.isEmpty()) return
         val l = str.split(' ').toMutableList()
         val name = l.first()

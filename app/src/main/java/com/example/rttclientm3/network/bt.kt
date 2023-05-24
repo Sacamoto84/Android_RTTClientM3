@@ -1,13 +1,19 @@
 package com.example.rttclientm3.network
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -19,6 +25,16 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.UUID
+
+/**
+ * Использование
+ *
+ * ```kotlin
+ *  BT.init(context)
+ *  BT.getPairedDevices()
+ *  BT.autoconnect()
+ * ```
+*/
 
 enum class BTstatus {
     DISCONNECT, CONNECTING, CONNECTED, RECEIVE
@@ -32,17 +48,33 @@ var btIsReady by mutableStateOf(false)
 
 lateinit var bluetoothManager: BluetoothManager
 lateinit var bluetoothAdapter: BluetoothAdapter
-private lateinit var esp32device: BluetoothDevice
+
+private var esp32device: BluetoothDevice ? = null
 
 private var mSocket: BluetoothSocket? = null
 private const val uuid: String = "00001101-0000-1000-8000-00805F9B34FB"
 
+object BT {
 
-object bt {
+    fun init(context: Context)
+    {
+        bluetoothManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.getSystemService(BluetoothManager::class.java)
+        } else {
+            ContextCompat.getSystemService( context, BluetoothManager::class.java)!!
+        }
+        bluetoothAdapter = bluetoothManager.adapter
+    }
+
 
     @SuppressLint("MissingPermission")
     fun getPairedDevices() {
+
+        /**
+         *  Получить список связанных устройств
+         */
         val pairedDevices: Set<BluetoothDevice> = bluetoothAdapter.bondedDevices
+
         pairedDevices.forEach {
             println(it.name)
             println(it.address)
@@ -50,15 +82,24 @@ object bt {
                 println(u.toString())
             }
         }
-        esp32device = pairedDevices.first { it.name == "ESP32" }
+
+        try {
+            esp32device = pairedDevices.first { it.name == "ESP32" }
+        }
+        catch (e : NoSuchElementException)
+        {
+            Timber.e("Блютус устройство 'ESP32' не найдено")
+        }
+
     }
 
-    private fun connect() {
+    private fun connect(context: Context) {
 
-        if (bluetoothAdapter.isEnabled) {
+        if (bluetoothAdapter.isEnabled and (esp32device != null))
+        {
             btStatus = BTstatus.CONNECTING
             val device = esp32device //bluetoothAdapter.getRemoteDevice(mac)
-            connectScope(device)
+            connectScope(context, device!!)
         }
     }
 
@@ -67,12 +108,12 @@ object bt {
 //    }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun autoconnect() {
+    fun autoconnect(context: Context) {
         GlobalScope.launch(Dispatchers.IO) {
             while (true) {
                 delay(1000)
                 if (btStatus == BTstatus.DISCONNECT) {
-                    connect()
+                    connect(context)
                 }
             }
         }
@@ -81,25 +122,29 @@ object bt {
 }
 
 @OptIn(DelicateCoroutinesApi::class)
-fun connectScope(device: BluetoothDevice) {
+fun connectScope(context: Context, device: BluetoothDevice) {
     GlobalScope.launch(Dispatchers.IO) {
-        try {
-            mSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(uuid))
-            Timber.i("Подключение...")
-            mSocket?.connect()
-            Timber.i("Подключились к устройству")
-            btIsConnected = true
-            btStatus = BTstatus.CONNECTED
-            receiveScope()
-        } catch (e: IOException) {
-            btIsConnected = false
-            mSocket?.close()
-            Timber.e("Не смогли подключиться к устройсву ${e.message}")
-            btStatus = BTstatus.DISCONNECT
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT ) == PackageManager.PERMISSION_GRANTED ) {
+
+            try {
+                mSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(uuid))
+                Timber.i("Подключение...")
+                mSocket?.connect()
+                Timber.i("Подключились к устройству")
+                btIsConnected = true
+                btStatus = BTstatus.CONNECTED
+                receiveScope()
+            } catch (e: IOException) {
+                btIsConnected = false
+                mSocket?.close()
+                Timber.e("Не смогли подключиться к устройсву ${e.message}")
+                btStatus = BTstatus.DISCONNECT
+            }
         }
+
     }
 }
-
 
 @OptIn(DelicateCoroutinesApi::class)
 fun receiveScope() {
@@ -131,7 +176,6 @@ fun receiveScope() {
         }
 
     }
-
 
     GlobalScope.launch(Dispatchers.IO) {
 

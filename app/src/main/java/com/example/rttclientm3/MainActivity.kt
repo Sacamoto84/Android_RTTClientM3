@@ -33,7 +33,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import libs.KeepScreenOn
 import libs.lan.ipToBroadCast
-import libs.lan.readIP
+import libs.lan.readLocalIP
 import timber.log.Timber.*
 
 lateinit var shared: SharedPreferences
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-            ipBroadcast = ipToBroadCast(readIP(applicationContext))
+            ipBroadcast = ipToBroadCast(readLocalIP(applicationContext))
             KeepScreenOn()
             vm.launchUIChanelRecive()
             val navController = rememberNavController()

@@ -31,7 +31,7 @@ import com.example.rttclientm3.R
 import com.example.rttclientm3.console
 import com.example.rttclientm3.telnetSlegenie
 import libs.lan.ipToBroadCast
-import libs.lan.readIP
+import libs.lan.readLocalIP
 import libs.lan.sendUDP
 
 private val colorBg = Color(0xFF1B1B1B)
@@ -123,7 +123,7 @@ private fun ButtonReset() {
         colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),
         onClick = {
             val s =
-                sendUDP("Reset", ip = ipToBroadCast(readIP(context)), port = 8889)
+                sendUDP("Reset", ip = ipToBroadCast(readLocalIP(context)), port = 8889)
             if (s == "OK") {
                console.consoleAdd("Команда перезагрузки контроллера")
                console.consoleAdd(" ")

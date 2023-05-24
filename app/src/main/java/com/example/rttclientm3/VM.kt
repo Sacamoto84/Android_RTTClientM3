@@ -48,12 +48,12 @@ class VM : ViewModel() {
                 console.messages.last().text = s.cmd
                 console.messages.last().pairList = pair
                 if (s.newString) console.consoleAdd("")
-            }
 
-            withContext(Dispatchers.Main)
-            {
-                //Timber.i("Ку ${channelLastString.isEmpty} ${colorline_and_text.size} ${colorline_and_text.last().text}")
-                console.recompose() //Для ручной композиции списка
+                withContext(Dispatchers.Main)
+                {
+                    //Timber.i("Ку ${channelLastString.isEmpty} ${colorline_and_text.size} ${colorline_and_text.last().text}")
+                    console.recompose() //Для ручной композиции списка
+                }
             }
 
         }
