@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 
 class VM : ViewModel() {
 
-    fun launchUIChanelRecive() {
+    fun launchUIChanelReceive() {
         viewModelScope.launch(Dispatchers.IO) {
             receiveUILastString()
         }

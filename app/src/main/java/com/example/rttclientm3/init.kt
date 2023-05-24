@@ -14,13 +14,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import libs.console.LineTextAndColor
 import libs.console.PairTextAndColor
+import libs.lan.ipToBroadCast
 import libs.lan.readLocalIP
 import timber.log.Timber
 
 
 class Initialization(private val context: Context) {
-
-    private var isInitialised = false
 
     private var nsdHelper: NsdHelper? = null
 
@@ -39,13 +38,13 @@ class Initialization(private val context: Context) {
             }
         }
 
+        init0()
+
     }
 
 
     @OptIn(DelicateCoroutinesApi::class)
     fun init0() {
-
-        if (!isInitialised) {
 
             Timber.plant(Timber.DebugTree())
             Timber.i("Привет")
@@ -82,13 +81,10 @@ class Initialization(private val context: Context) {
                 udp.receiveScope()
             }
 
-
             decoder.run()
             decoder.addCmd("pong") {
 
             }
-
-
 
             val version = BuildConfig.VERSION_NAME
 
@@ -97,7 +93,7 @@ class Initialization(private val context: Context) {
                 LineTextAndColor(
                     text = "Первый нах",
                     pairList =
-                    listOf<PairTextAndColor>(
+                    listOf(
                         PairTextAndColor(
                             text = " RTT ",
                             colorText = Color(0xFFFFAA00),
@@ -140,9 +136,7 @@ class Initialization(private val context: Context) {
 
             console.consoleAdd("") //Пустая строка
 
-        }
-
-        isInitialised = true
+            ipBroadcast = ipToBroadCast(readLocalIP(context))
 
     }
 

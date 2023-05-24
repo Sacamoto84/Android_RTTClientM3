@@ -13,27 +13,37 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+
 import com.example.rttclientm3.network.bluetoothAdapter
 import com.example.rttclientm3.network.btIsReady
 import com.example.rttclientm3.screen.info.ScreenInfo
 import com.example.rttclientm3.screen.lazy.ScreenLazy
 import com.example.rttclientm3.screen.web.Web
 import com.example.rttclientm3.ui.theme.RTTClientM3Theme
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import libs.KeepScreenOn
 import libs.lan.ipToBroadCast
 import libs.lan.readLocalIP
+import timber.log.Timber
 import timber.log.Timber.*
 
 lateinit var shared: SharedPreferences
@@ -44,20 +54,22 @@ class MainActivity : ComponentActivity() {
 
     private val vm: VM by viewModels()
 
-    @OptIn(ExperimentalPermissionsApi::class)
+    @OptIn(ExperimentalPermissionsApi::class, ExperimentalAnimationApi::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val ini = Initialization(applicationContext)
-        ini.init0()
+        if (!isInitialized)
+          Initialization(applicationContext)
+
+        isInitialized = true
 
         setContent {
 
-            ipBroadcast = ipToBroadCast(readLocalIP(applicationContext))
             KeepScreenOn()
-            vm.launchUIChanelRecive()
-            val navController = rememberNavController()
+
+            vm.launchUIChanelReceive()
+
             RTTClientM3Theme {
 
                 val bluetoothPermissions =
@@ -84,7 +96,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    BuildNavGraph(navController)
+                    BuildNavGraph()
                 }
 
 //                if (bluetoothPermissions.allPermissionsGranted) {
@@ -112,20 +124,21 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun ButtonBluetooth() {
     val enableBluetoothContract = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        if (it.resultCode == Activity.RESULT_OK) {
-            Log.d("bluetoothLauncher", "Success")
-            btIsReady = true
+
+        btIsReady = if (it.resultCode == Activity.RESULT_OK) {
+            Timber.w("bluetoothLauncher Success")
+            true
             //bluetoothPrint.print()
         } else {
-            Log.w("bluetoothLauncher", "Failed")
-            btIsReady = false
+            Timber.w("bluetoothLauncher Failed")
+            false
         }
+
     }
 
     // This intent will open the enable bluetooth dialog
@@ -149,22 +162,38 @@ private fun ButtonBluetooth() {
 }
 
 
+
+
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun BuildNavGraph(navController: NavHostController) {
-    NavHost(
+fun BuildNavGraph() {
+
+    val navController = rememberAnimatedNavController()
+
+    AnimatedNavHost(
         navController = navController,
-        startDestination = "home"
+        startDestination = "home",
     ) {
 
-        composable(route = "home") {
+        composable(
+            "home",
+            enterTransition = { fadeIn(animationSpec = tween(0)) },
+            exitTransition = { fadeOut(animationSpec = tween(0)) }
+        ) {
             ScreenLazy(navController)
         }
 
-        composable(route = "info") {
+        composable("info",
+            enterTransition = { fadeIn(animationSpec = tween(0)) },
+            exitTransition = { fadeOut(animationSpec = tween(0)) })
+        {
             ScreenInfo(navController)
         }
 
-        composable(route = "web") {
+        composable("web",
+            enterTransition = { fadeIn(animationSpec = tween(0)) },
+            exitTransition = { fadeOut(animationSpec = tween(0)) }
+        ) {
             Web(navController)
         }
 

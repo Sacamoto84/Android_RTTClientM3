@@ -12,6 +12,11 @@ import libs.console.Console
  */
 
 
+/**
+ * Флаг того что произошла инициализация
+ */
+var isInitialized = false
+
 
 var isCheckedUseLiteralEnter by mutableStateOf(false) //MARK: Показывать в конце строки символ энтер
 //val isCheckedUseLineVisible  = mutableStateOf(false) //MARK: Показывать номер строки
