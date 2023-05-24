@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
 
     private val vm: VM by viewModels()
 
-    @OptIn(ExperimentalPermissionsApi::class, ExperimentalAnimationApi::class)
+    @OptIn(ExperimentalPermissionsApi::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

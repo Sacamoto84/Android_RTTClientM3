@@ -26,7 +26,7 @@ android {
         applicationId "com.example.rttclientm3"
         minSdk 21
         targetSdk 33
-        versionCode 278
+        versionCode 279
         versionName versionCode.toString()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

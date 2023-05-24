@@ -34,7 +34,7 @@ import libs.lan.ipToBroadCast
 import libs.lan.readLocalIP
 import libs.lan.sendUDP
 
-private val colorBg = Color(0xFF1B1B1B)
+val colorBg = Color(0xFF1B1B1B)
 
 @Composable
 fun BottomNavigationLazy(navController: NavController) {

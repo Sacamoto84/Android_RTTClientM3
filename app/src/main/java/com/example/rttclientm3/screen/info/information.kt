@@ -46,6 +46,7 @@ fun ScreenInfo(navController: NavController) {
             .background(Color(0xFF090909))
     ) {
 
+
         Column(
             Modifier
                 .fillMaxSize()
@@ -66,7 +67,7 @@ fun ScreenInfo(navController: NavController) {
             Text(text = "  Порт 8888 | Очистка экрана \\033[1m ", color = Color.White)
 
             Spacer(modifier = Modifier.height(5.dp))
-            
+
             //Рисуем таблицу
             Column(
                 Modifier
@@ -149,32 +150,46 @@ fun ScreenInfo(navController: NavController) {
                 }
             }
 
+
+
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp),
+                    .padding(top = 10.dp, start = 8.dp, end = 8.dp),
                 onClick = { navController.navigate("web") }
             )
             {
                 Text("Открыть Портал", fontSize = 20.sp)
             }
 
+
+
+
+
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp),
+                    .padding(top = 10.dp, start = 8.dp, end = 8.dp),
                 colors = CardDefaults.outlinedCardColors(containerColor = Color.Gray)
             )
             {
-                Text(text = "IP адрес телефона $ipAddress", color = Color.White, modifier = Modifier.padding(start = 20.dp, top = 5.dp))
-                val str = if (ipESP[0]=='/') ipESP.removePrefix("/") else ipESP
-                Text(text = "IP адрес esp.local   $str", color = Color.White, modifier = Modifier.padding(start = 20.dp, bottom = 5.dp))
+                Text(
+                    text = "IP адрес телефона $ipAddress",
+                    color = Color.White,
+                    modifier = Modifier.padding(start = 20.dp, top = 5.dp)
+                )
+                val str = if (ipESP[0] == '/') ipESP.removePrefix("/") else ipESP
+                Text(
+                    text = "IP адрес esp.local   $str",
+                    color = Color.White,
+                    modifier = Modifier.padding(start = 20.dp, bottom = 5.dp)
+                )
             }
 
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp),
+                    .padding(top = 10.dp , start = 8.dp, end = 8.dp),
                 colors = CardDefaults.outlinedCardColors(containerColor = Color.Gray)
             )
             {
@@ -228,7 +243,7 @@ fun ScreenInfo(navController: NavController) {
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp, bottom = 100.dp),
+                    .padding(top = 10.dp, bottom = 100.dp , start = 8.dp, end = 8.dp),
                 colors = CardDefaults.outlinedCardColors(containerColor = Color.Gray)
             )
             {
@@ -276,6 +291,10 @@ fun ScreenInfo(navController: NavController) {
 
 
         }
+
+        BottomNavigationInfo(navController)
+
+
     }
 }
 
