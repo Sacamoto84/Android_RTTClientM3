@@ -25,7 +25,7 @@ var isCheckedUseLiteralEnter by mutableStateOf(false) //MARK: Показыват
 /**
  * ## Размер текста в консоли
  */
-var console_text = mutableStateOf( 12.sp )
+var console_text by mutableStateOf( 12 )
 /////////////////////////////////////////////////////////
 /**
  * ## Слежение за последней строкой

@@ -205,7 +205,7 @@ fun ScreenInfo(navController: NavController) {
                                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 5.dp),
                                     colors = ButtonDefaults.elevatedButtonColors(
                                         containerColor =
-                                        if (console_text.value == (12 + x * 2 + y * 8).sp)
+                                        if (console_text == (12 + x * 2 + y * 8))
                                             Color.LightGray else Color.DarkGray
                                     ),
                                     modifier = Modifier
@@ -214,7 +214,8 @@ fun ScreenInfo(navController: NavController) {
                                     onClick = {
                                         val iii = 12 + x * 2 + y * 8
                                         println("Изменение шрифта на $iii")
-                                        console_text.value = iii.sp
+                                        console_text = iii
+                                        console.setFontSize(console_text)
                                         console.consoleAdd("Изменение шрифта")
                                         shared.edit().putString("size", "$iii").apply()
                                     }
@@ -223,7 +224,7 @@ fun ScreenInfo(navController: NavController) {
                                     val iii = 12 + x * 2 + y * 8
                                     Text(
                                         text = "$iii", color =
-                                        if (console_text.value == (12 + x * 2 + y * 8).sp) Color.Black
+                                        if (console_text == (12 + x * 2 + y * 8)) Color.Black
                                         else Color.LightGray,
                                         fontSize = 20.sp
                                     )

@@ -54,7 +54,7 @@ class Initialization(private val context: Context) {
             BT.autoconnect(context)
 
             shared = context.getSharedPreferences("size", Context.MODE_PRIVATE)
-            console_text.value = shared.getString("size", "12")?.toInt()?.sp ?: 12.sp
+            console_text = shared.getString("size", "12")?.toInt() ?: 12
 
             //MARK: Вывод символа энтер
             isCheckedUseLiteralEnter = shared.getBoolean("enter", false)

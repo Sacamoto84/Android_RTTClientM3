@@ -62,7 +62,7 @@ private fun convertStringToAnnotatedString(item: LineTextAndColor, index: Int): 
                     fontWeight = if (item.pairList[i].bold) FontWeight.Bold else null,
                     fontStyle = if (item.pairList[i].italic) FontStyle.Italic else null,
 
-                    fontSize = console_text.value,
+                    fontSize = console_text.sp,
                 )
             )
             { append(item.pairList[i].text) }
