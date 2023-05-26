@@ -6,6 +6,7 @@ import libs.console.PairTextAndColor
 import com.example.rttclientm3.network.channelLastString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -49,12 +50,15 @@ class VM : ViewModel() {
                 console.messages.last().pairList = pair
                 if (s.newString) console.consoleAdd("")
 
-                withContext(Dispatchers.Main)
-                {
-                    //Timber.i("Ку ${channelLastString.isEmpty} ${colorline_and_text.size} ${colorline_and_text.last().text}")
-                    console.recompose() //Для ручной композиции списка
-                }
+
             }
+
+            withContext(Dispatchers.Main)
+            {
+                //Timber.i("Ку ${channelLastString.isEmpty} ${colorline_and_text.size} ${colorline_and_text.last().text}")
+                console.recompose() //Для ручной композиции списка
+            }
+
 
         }
     }

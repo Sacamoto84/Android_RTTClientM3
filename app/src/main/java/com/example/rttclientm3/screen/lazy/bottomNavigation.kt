@@ -86,6 +86,7 @@ private fun ButtonSlegenie(modifier: Modifier = Modifier)
         onClick = {
             telnetSlegenie.value = !telnetSlegenie.value!!
             console.lastCount = console.messages.size
+            console.tracking = telnetSlegenie.value!!
         }
     ) {
         console.recompose()
@@ -116,32 +117,33 @@ private fun ButtonClear() {
 @Composable
 private fun ButtonReset() {
 
-    val context = LocalContext.current
+//    val context = LocalContext.current
+//
+//    IconButton(
+//        modifier = Modifier.size(34.dp),
+//        colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),
+//        onClick = {
+//            val s =
+//                sendUDP("Reset", ip = ipToBroadCast(readLocalIP(context)), port = 8889)
+//            if (s == "OK") {
+//               console.consoleAdd("Команда перезагрузки контроллера")
+//               console.consoleAdd(" ")
+//            } else {
+//                if (s == "sendto failed: ENETUNREACH (Network is unreachable)")
+//                    console.consoleAdd("Отсуствует Wifi сеть", color = Color.Red)
+//                else
+//                    console.consoleAdd(s, color = Color.Red)
+//            }
+//        }
+//    ) {
+//        Icon(
+//            painter = painterResource(R.drawable.reset),
+//            tint = Color.LightGray,
+//            contentDescription = null
+//        )
+//
+//    }
 
-    IconButton(
-        modifier = Modifier.size(34.dp),
-        colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),
-        onClick = {
-            val s =
-                sendUDP("Reset", ip = ipToBroadCast(readLocalIP(context)), port = 8889)
-            if (s == "OK") {
-               console.consoleAdd("Команда перезагрузки контроллера")
-               console.consoleAdd(" ")
-            } else {
-                if (s == "sendto failed: ENETUNREACH (Network is unreachable)")
-                    console.consoleAdd("Отсуствует Wifi сеть", color = Color.Red)
-                else
-                    console.consoleAdd(s, color = Color.Red)
-            }
-        }
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.reset),
-            tint = Color.LightGray,
-            contentDescription = null
-        )
-
-    }
 }
 
 @Composable
