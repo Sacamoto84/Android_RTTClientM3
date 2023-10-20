@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.rttclientm3.console
+import com.example.rttclientm3.screen.lazy.bottomNavigation.BottomNavigationLazy
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

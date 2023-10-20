@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.rttclientm3.R
-import com.example.rttclientm3.screen.lazy.colorBg
+import com.example.rttclientm3.screen.lazy.bottomNavigation.colorBg
 
 @Composable
 fun BottomNavigationInfo(navController: NavController) {

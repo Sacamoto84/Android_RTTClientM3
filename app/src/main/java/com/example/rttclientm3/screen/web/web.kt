@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.rttclientm3.R
 import com.example.rttclientm3.ipESP
-import com.example.rttclientm3.screen.lazy.colorBg
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.web.WebView
