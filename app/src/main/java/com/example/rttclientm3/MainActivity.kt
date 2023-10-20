@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -23,9 +22,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
-
 import com.example.rttclientm3.network.bluetoothAdapter
 import com.example.rttclientm3.network.btIsReady
 import com.example.rttclientm3.screen.info.ScreenInfo
@@ -35,14 +31,9 @@ import com.example.rttclientm3.ui.theme.RTTClientM3Theme
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import libs.KeepScreenOn
-import libs.lan.ipToBroadCast
-import libs.lan.readLocalIP
 import timber.log.Timber
 import timber.log.Timber.*
 
