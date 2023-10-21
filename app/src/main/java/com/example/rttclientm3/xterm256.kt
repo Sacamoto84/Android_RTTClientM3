@@ -9,13 +9,23 @@ val allColor = mutableListOf<Color>() //Палитра цветов по код�
 val defaultTextColor: Color = Color.White
 val defaultBgColor: Color = Color.Black
 
-var currentTextColor: Color = Color.White
-var currentBgColor: Color = Color.Black
-var currentTextBold = false
-var currentTextItalic = false
-var currentTextUnderline = false
-var currentTextFlash = false   //Мигание
+//var currentTextColor: Color = Color.White
+//var currentBgColor: Color = Color.Black
+//var currentTextBold = false
+//var currentTextItalic = false
+//var currentTextUnderline = false
+//var currentTextFlash = false   //Мигание
 
+data class CurrentColor(
+    var color: Color = Color.White,
+    var bgColor: Color = Color.Black,
+    var bold: Boolean = false,
+    var italic: Boolean = false,
+    var underline: Boolean = false,
+    var flash: Boolean = false   //Мигание
+)
+val сurrentColor = CurrentColor()
+val symbolColor  = CurrentColor()
 
 //Json цвета в палитру allColor
 fun colorJsonToList() {
@@ -48,12 +58,12 @@ fun stringcalculate(text: String): List<PairTextAndColor> {
         listPair.add(
             PairTextAndColor(
                 text = str,
-                colorText = currentTextColor,
-                colorBg = currentBgColor,
-                bold = currentTextBold,
-                italic = currentTextItalic,
-                underline = currentTextUnderline,
-                flash = currentTextFlash
+                colorText = сurrentColor.color,
+                colorBg = сurrentColor.bgColor,
+                bold = сurrentColor.bold,
+                italic = сurrentColor.italic,
+                underline = сurrentColor.underline,
+                flash = сurrentColor.flash
             )
         )
         return listPair
@@ -66,12 +76,12 @@ fun stringcalculate(text: String): List<PairTextAndColor> {
                 listPair.add(
                     PairTextAndColor(
                         text = str,
-                        colorText = currentTextColor,
-                        colorBg = currentBgColor,
-                        bold = currentTextBold,
-                        italic = currentTextItalic,
-                        underline = currentTextUnderline,
-                        flash = currentTextFlash
+                        colorText = сurrentColor.color,
+                        colorBg = сurrentColor.bgColor,
+                        bold = сurrentColor.bold,
+                        italic = сurrentColor.italic,
+                        underline = сurrentColor.underline,
+                        flash = сurrentColor.flash
                     )
                 )
             } else
@@ -86,12 +96,12 @@ fun stringcalculate(text: String): List<PairTextAndColor> {
                     listPair.add(
                         PairTextAndColor(
                             text = subsring,
-                            colorText = currentTextColor,
-                            colorBg = currentBgColor,
-                            bold = currentTextBold,
-                            italic = currentTextItalic,
-                            underline = currentTextUnderline,
-                            flash = currentTextFlash
+                            colorText = сurrentColor.color,
+                            colorBg = сurrentColor.bgColor,
+                            bold = сurrentColor.bold,
+                            italic = сurrentColor.italic,
+                            underline = сurrentColor.underline,
+                            flash = сurrentColor.flash
                         )
                     )
                     str = str.removePrefix(subsring) //Удаляем из исходной строки эту подстроку
@@ -109,19 +119,19 @@ fun calculateColorInEscString(str: String) {
     val rederxBgColor = """48;05;([^;]+)""".toRegex()
 
     if (str == "0") {
-        currentTextColor = defaultTextColor
-        currentBgColor = defaultBgColor
+        сurrentColor.color = defaultTextColor
+        сurrentColor.bgColor = defaultBgColor
 
-        currentTextBold = false
-        currentTextItalic = false
-        currentTextUnderline = false
-        currentTextFlash = false
+        сurrentColor.bold = false
+        сurrentColor.italic = false
+        сurrentColor.underline = false
+        сurrentColor.flash = false
 
         return
     }
 
     if (str == "1") {
-        console.messages.value.clear()// removeRange(0, colorline_and_text.lastIndex)
+        console._messages.value.clear()// removeRange(0, colorline_and_text.lastIndex)
         console.consoleAdd(" ")
         return
     }
@@ -134,7 +144,7 @@ fun calculateColorInEscString(str: String) {
         matchResult = rederxTextColor.find(str)
         if (matchResult != null) {
             val color = colorIn256(matchResult.groupValues[1].toInt()) //Получили цвет по коду
-            currentTextColor = color
+            сurrentColor.color = color
             //println("--->calculateColorInString->codeColor:${color}")
             str1 = str.replace(matchResult.value, "")
         }
@@ -147,7 +157,7 @@ fun calculateColorInEscString(str: String) {
         matchResult = rederxBgColor.find(str1)
         if (matchResult != null) {
             val color = colorIn256(matchResult.groupValues[1].toInt()) //Получили цвет по коду
-            currentBgColor = color
+            сurrentColor.bgColor = color
             //println("--->calculateColorInString->currentBgColor:${color}")
             str1 = str1.replace(matchResult.value, "")
         }
@@ -156,21 +166,21 @@ fun calculateColorInEscString(str: String) {
     }
 
     //MARK: Bold
-    if (str1.indexOf("01") != -1) currentTextBold = true
+    if (str1.indexOf("01") != -1) сurrentColor.bold = true
 
     //MARK:Italic
-    if (str1.indexOf("03") != -1) currentTextItalic = true
+    if (str1.indexOf("03") != -1) сurrentColor.italic = true
 
     //MARK: Uderline
-    if (str1.indexOf("04") != -1) currentTextUnderline = true
+    if (str1.indexOf("04") != -1) сurrentColor.underline = true
 
     //MARK: Reverse
     if (str1.indexOf("07") != -1) {
-        val temp = currentBgColor
-        currentBgColor = currentTextColor
-        currentTextColor = temp
+        val temp = сurrentColor.bgColor
+        сurrentColor.bgColor = сurrentColor.color
+        сurrentColor.color = temp
     }
 
     //MARK: Flash
-    if (str1.indexOf("08") != -1) currentTextFlash = true
+    if (str1.indexOf("08") != -1) сurrentColor.flash = true
 }

@@ -1,5 +1,6 @@
 package com.example.rttclientm3
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rttclientm3.screen.lazy.PairTextAndColor
@@ -19,8 +20,9 @@ class VM : ViewModel() {
 
 
     //Создание списка pairTextAndColor из исходного текста
-    private fun text_to_paitList(txt: String): List<PairTextAndColor> {
+    private fun text_to_paitList(txt: String, mod : PairTextAndColor? = null): List<PairTextAndColor> {
         val pair: MutableList<PairTextAndColor> = arrayListOf()
+
         //замена [ на \u001C это и будет новый разделитель
         val str = txt.replace("\u001B", "\u001C\u001B")
 
@@ -33,6 +35,10 @@ class VM : ViewModel() {
                 //println("!text_to_paitList! split по ESC >>$str1")
                 val p = stringcalculate(str1)
                 pair.addAll(p)//Создаем список пар для одной строки
+
+                if (mod != null)
+                    pair.add(mod)
+
             }
         }
         return pair
@@ -54,10 +60,15 @@ class VM : ViewModel() {
                 if(s.cmd == "")
                     continue
 
+                //Отображение курсора, без записи в массив
+                var mod: PairTextAndColor? = null
                 if ((isCheckedUseLiteralEnter) && ((!s.newString)))
-                    s.cmd += '▁'//'⤵'▮ ▯ ▎
+                    mod = PairTextAndColor("▁", Color.Green, Color.Black, true)
 
-                val pair = text_to_paitList(s.cmd)
+                    //s.cmd += '▁'//'⤵'▮ ▯ ▎
+
+
+                val pair = text_to_paitList(s.cmd, mod)
                 console._messages.value.last().text = s.cmd
                 console._messages.value.last().pairList = pair
 
