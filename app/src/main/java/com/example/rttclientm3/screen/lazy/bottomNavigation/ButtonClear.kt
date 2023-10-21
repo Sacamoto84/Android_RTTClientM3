@@ -18,9 +18,11 @@ fun ButtonClear() {
         modifier = Modifier.size(34.dp),
         colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),
         onClick = {
-            console.messages.clear()
-            console.consoleAdd(" ")
-            console.recompose()
+            console._messages.value.clear()
+            //console.messages.removeAt(console.messages.lastIndex)
+            //console.messages = console.messages.toMutableList()
+            //console.consoleAdd("...")
+            //console.recompose()
         }
     )
     {

@@ -3,7 +3,6 @@ package com.example.rttclientm3
 import android.content.Context
 import android.net.nsd.NsdServiceInfo
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp
 import com.example.rttclientm3.network.BT
 import com.example.rttclientm3.network.UDP
 import com.example.rttclientm3.network.channelNetworkIn
@@ -12,8 +11,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import libs.console.LineTextAndColor
-import libs.console.PairTextAndColor
+import com.example.rttclientm3.screen.lazy.LineTextAndColor
+import com.example.rttclientm3.screen.lazy.PairTextAndColor
 import libs.lan.ipToBroadCast
 import libs.lan.readLocalIP
 import timber.log.Timber
@@ -89,7 +88,7 @@ class Initialization(private val context: Context) {
             val version = BuildConfig.VERSION_NAME
 
             //Нужно добавить ее в список лази как текущую
-            console.messages.add(
+            console.messages.value.add(
                 LineTextAndColor(
                     text = "Первый нах",
                     pairList =

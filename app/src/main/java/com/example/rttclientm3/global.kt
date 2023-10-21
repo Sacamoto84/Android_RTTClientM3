@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
-import libs.console.Console
+import com.example.rttclientm3.screen.lazy.Console
 
 /**
  * # Глобальные переменные

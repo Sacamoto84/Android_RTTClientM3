@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.rttclientm3.console
 import com.example.rttclientm3.screen.lazy.bottomNavigation.BottomNavigationLazy
+import libs.modifier.recomposeHighlighter
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -19,7 +20,7 @@ fun ScreenLazy(navController: NavHostController) {
     Column(Modifier.fillMaxSize()) {
         Box(Modifier.fillMaxSize().weight(1f))
         {
-            console.lazy (Modifier.padding(4.dp))
+            console.lazy (Modifier.padding(4.dp).recomposeHighlighter())
             Warning()
         }
         BottomNavigationLazy(navController)

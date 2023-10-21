@@ -39,7 +39,7 @@ class NetCommandDecoder(
             var string =
                 channelIn.receive() //Получить строку с канала, может содежать несколько строк
 
-            string = string.replace('\r', '▒')
+             string = string.replace("\r", "[CR]")
 
             //Timber.e( "in>>>${string.length} "+string )
 
