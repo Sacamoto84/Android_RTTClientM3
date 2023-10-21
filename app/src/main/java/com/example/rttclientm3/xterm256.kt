@@ -70,6 +70,7 @@ fun stringcalculate(text: String): List<PairTextAndColor> {
     } else {
         //Начало строки
         if (indexESC == 0) {
+
             if (str.indexOf('m') == -1) //Поиск m в конце если ее нет
             {
                 //Нет хвоста должен быть в следующем пакете
@@ -85,6 +86,7 @@ fun stringcalculate(text: String): List<PairTextAndColor> {
                     )
                 )
             } else
+
                 do {
                     // подстрока до первого указанного разделителя
                     val strESC = str.substringBefore('m') // все что до m
@@ -121,12 +123,10 @@ fun calculateColorInEscString(str: String) {
     if (str == "0") {
         сurrentColor.color = defaultTextColor
         сurrentColor.bgColor = defaultBgColor
-
         сurrentColor.bold = false
         сurrentColor.italic = false
         сurrentColor.underline = false
         сurrentColor.flash = false
-
         return
     }
 
