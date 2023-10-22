@@ -33,11 +33,11 @@ fun ButtonSlegenie(modifier: Modifier = Modifier)
         ),
         onClick = {
             telnetSlegenie.value = !telnetSlegenie.value!!
-            console.lastCount = console.messages.value.size
+            console.lastCount = console._messages.size
             console.tracking = telnetSlegenie.value!!
         }
     ) {
-        console.recompose()
-        Text(text = "${ console.messages.value.size }")
+        //console.recompose()
+        //Text(text = "${ console.messages.value.size }")
     }
 }

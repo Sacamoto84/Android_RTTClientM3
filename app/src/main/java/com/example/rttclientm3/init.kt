@@ -85,10 +85,10 @@ class Initialization(private val context: Context) {
 
             }
 
-            val version = BuildConfig.VERSION_NAME
+            val version = 281 //BuildConfig.VERSION_NAME
 
             //Нужно добавить ее в список лази как текущую
-            console.messages.value.add(
+            console._messages.add(
                 LineTextAndColor(
                     text = "Первый нах",
                     pairList =

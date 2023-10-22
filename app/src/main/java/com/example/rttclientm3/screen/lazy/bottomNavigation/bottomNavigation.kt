@@ -34,12 +34,12 @@ fun BottomNavigationLazy(navController: NavController) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ButtonSlegenie(Modifier.weight(1f))
+            //ButtonSlegenie(Modifier.weight(1f))
             //Кнопка сброса списка
             Spacer(modifier = Modifier.width(8.dp))
             ButtonClear() //Кнопка очистка списка
             Spacer(modifier = Modifier.width(16.dp))
-            ButtonReset() //Кнопка перегрузки контроллера
+            //ButtonReset() //Кнопка перегрузки контроллера
             Spacer(modifier = Modifier.width(16.dp))
             ButtonSetting(navController)
             Spacer(modifier = Modifier.width(16.dp))

@@ -11,6 +11,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.rttclientm3.R
 import com.example.rttclientm3.console
+import com.example.rttclientm3.screen.lazy.LineTextAndColor
+import com.example.rttclientm3.screen.lazy.PairTextAndColor
 
 @Composable
 fun ButtonClear() {
@@ -18,11 +20,7 @@ fun ButtonClear() {
         modifier = Modifier.size(34.dp),
         colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF505050)),
         onClick = {
-            console._messages.value.clear()
-            //console.messages.removeAt(console.messages.lastIndex)
-            //console.messages = console.messages.toMutableList()
-            //console.consoleAdd("...")
-            //console.recompose()
+            console.clear()
         }
     )
     {
