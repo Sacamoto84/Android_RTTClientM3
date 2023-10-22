@@ -62,11 +62,15 @@ class VM : ViewModel() {
 
                 //Отображение курсора, без записи в массив
                 var mod: PairTextAndColor? = null
-                if ((isCheckedUseLiteralEnter) && ((!s.newString)))
-                    mod = PairTextAndColor("▁", Color.Green, Color.Black, true, flash = true)
+//                if ((isCheckedUseLiteralEnter) && ((!s.newString)))
+//                    mod = PairTextAndColor("▁", Color.Green, Color.Black, true, flash = true)
 
                     //s.cmd += '▁'//'⤵'▮ ▯ ▎
 
+
+                //println("s.newString=${s.newString}")
+
+                mod = PairTextAndColor("▁", Color.Green, Color.Black, true, flash = true)
 
                 val pair = text_to_paitList(s.cmd, mod)
                 console._messages.value.last().text = s.cmd

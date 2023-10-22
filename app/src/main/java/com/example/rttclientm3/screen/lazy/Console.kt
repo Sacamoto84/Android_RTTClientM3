@@ -2,41 +2,38 @@ package com.example.rttclientm3.screen.lazy
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.GenericFontFamily
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import com.example.rttclientm3.R
+import com.example.rttclientm3.ScriptItemDraw
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
+var update = MutableStateFlow(true)   //для мигания
+
 
 data class PairTextAndColor(
     var text: String,
@@ -59,8 +56,20 @@ data class LineTextAndColor(
 //println("Смещение прокрутки первого видимого элемента = " + lazyListState.firstVisibleItemScrollOffset.toString())
 //println("Количество строк выведенных на экран lastIndex = " + lazyListState.layoutInfo.visibleItemsInfo.lastIndex.toString())
 
+@OptIn(DelicateCoroutinesApi::class)
 @SuppressLint("MutableCollectionMutableState")
 class Console {
+
+    init {
+
+        GlobalScope.launch {
+            while (true) {
+                delay(700L)
+                update.value = !update.value
+            }
+        }
+
+    }
 
 
     private var recompose = MutableStateFlow(0)
@@ -78,7 +87,7 @@ class Console {
      *  # Настройка шрифтов
      *  ### Размер шрифта
      */
-    private var fontSize by mutableStateOf(12.sp)
+    var fontSize by mutableStateOf(12.sp)
 
     /**
      * ### Используемый шрифт
@@ -111,9 +120,9 @@ class Console {
 
         println("recompose lazy")
 
-        recompose.collectAsState().value
 
-        var update by remember { mutableStateOf(true) }  //для мигания
+
+        //var update by remember { mutableStateOf(true) }  //для мигания
 
         val lazyListState: LazyListState = rememberLazyListState()
 
@@ -130,7 +139,7 @@ class Console {
         LaunchedEffect(key1 = list) {
             while (true) {
                 delay(700L)
-                update = !update
+                //update = !update
                 recompose.value++
                 //////////////////////telnetWarning.value = (telnetSlegenie.value == false) && (messages.size > lastCount)
             }
@@ -160,6 +169,7 @@ class Console {
 //            {
 
 
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -176,61 +186,78 @@ class Console {
         )
         {
 
+
             //if (_messages.isNotEmpty())
             itemsIndexed(list.value)
             { index, item ->
 
-                if (index < list.value.size)
-                    Row(verticalAlignment = Alignment.Top)
-                    {
+                update.collectAsState().value
+                recompose.collectAsState().value
 
-                        val s = item.pairList.size
-                        if ((s > 0) && (lineVisible)) {
+                ScriptItemDraw({ item }, { index }, { false })
 
-                            val str: String = when (index) {
-                                in 0..9 -> String.format("   %d>", index)
-                                in 10..99 -> String.format("  %d>", index)
-                                in 100..999 -> String.format(" %d>", index)
-                                else -> String.format("%d>", index)
-                            }
+//                if (index < list.value.size)
+//                    Row(verticalAlignment = Alignment.Top)
+//                    {
+//
+//                        val s = item.pairList.size
+//                        if ((s > 0) && (lineVisible)) {
+//
+//                            val str: String = when (index) {
+//                                in 0..9 -> String.format("   %d>", index)
+//                                in 10..99 -> String.format("  %d>", index)
+//                                in 100..999 -> String.format(" %d>", index)
+//                                else -> String.format("%d>", index)
+//                            }
+//
+//                            Text(
+//                                text = str,
+//                                color = if (item.pairList.isEmpty()) Color.DarkGray else Color.Gray,
+//                                fontSize = fontSize,
+//                                fontFamily = fontFamily,
+//                                lineHeight = fontSize * 1.2f
+//                            )
+//                        }
+//
+//                        for (i in 0 until s) {
+//
+//                            Text(
+//                                text = item.pairList[i].text,
+//                                color = if (!item.pairList[i].flash)
+//                                    item.pairList[i].colorText
+//                                else
+//                                    if (update)
+//                                        item.pairList[i].colorText
+//                                    else
+//                                        Color(0xFF090909),
+//
+//                                modifier = Modifier.weight(1f)
+//                                    .background(
+//                                        if (!item.pairList[i].flash)
+//                                            item.pairList[i].colorBg
+//                                        else
+//                                            if (update)
+//                                                item.pairList[i].colorBg
+//                                            else Color(0xFF090909)
+//                                    ),
+//                                textDecoration = if (item.pairList[i].underline) TextDecoration.Underline else null,
+//                                fontWeight = if (item.pairList[i].bold) FontWeight.Bold else null,
+//                                fontStyle = if (item.pairList[i].italic) FontStyle.Italic else null,
+//                                fontSize = fontSize,
+//                                fontFamily = fontFamily,
+//                                lineHeight = fontSize * 1.2f,
+//
+//                                overflow = TextOverflow.Visible,
+//                                //maxLines = 3
+//                                //minLines = 1
+//                            )
+//
+//                        }
+//                    }
+//
 
-                            Text(
-                                text = str,
-                                color = if (item.pairList.isEmpty()) Color.DarkGray else Color.Gray,
-                                fontSize = fontSize,
-                                fontFamily = fontFamily,
-                                lineHeight = fontSize * 1.2f
-                            )
-                        }
 
-                        for (i in 0 until s) {
-
-                            Text(
-                                text = item.pairList[i].text,
-                                color = if (!item.pairList[i].flash)
-                                    item.pairList[i].colorText
-                                else
-                                if (update) item.pairList[i].colorText else Color(0xFF090909)
-                                    //Color(0xFF090909)
-                                ,
-                                modifier = Modifier
-                                    .background(
-                                        if (!item.pairList[i].flash) item.pairList[i].colorBg else
-                                        if (update) item.pairList[i].colorBg else Color(0xFF090909)
-                                           // Color(0xFF090909)
-                                    ),
-                                textDecoration = if (item.pairList[i].underline) TextDecoration.Underline else null,
-                                fontWeight = if (item.pairList[i].bold) FontWeight.Bold else null,
-                                fontStyle = if (item.pairList[i].italic) FontStyle.Italic else null,
-                                fontSize = fontSize,
-                                fontFamily = fontFamily,
-                                lineHeight = fontSize * 1.2f
-                            )
-
-                        }
-                    }
             }
-
 
 
             //               }
@@ -241,7 +268,12 @@ class Console {
 
     }
 
-    fun consoleAdd(text: String, color: Color = Color.Green, bgColor: Color = Color.Black, flash : Boolean = false) {
+    fun consoleAdd(
+        text: String,
+        color: Color = Color.Green,
+        bgColor: Color = Color.Black,
+        flash: Boolean = false
+    ) {
         if ((_messages.value.size > 0) && (_messages.value.last().text == " ")) {
             _messages.value.removeAt(_messages.value.lastIndex)
             _messages.value.add(

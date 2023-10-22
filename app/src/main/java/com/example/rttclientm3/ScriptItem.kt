@@ -19,6 +19,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rttclientm3.screen.lazy.LineTextAndColor
+import com.example.rttclientm3.screen.lazy.update
 
 @Composable
 fun ScriptItemDraw(item: () -> LineTextAndColor, index: () -> Int, select: () -> Boolean) {
@@ -30,21 +31,25 @@ fun ScriptItemDraw(item: () -> LineTextAndColor, index: () -> Int, select: () ->
         x,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 0.dp)
+            //.padding(top = 0.dp)
             .background(if (select()) Color.Cyan else Color.Transparent),
-        fontSize = 20.sp
+
+        fontSize = console.fontSize,
+        fontFamily = FontFamily(Font(R.font.jetbrains, FontWeight.Normal)),
+        lineHeight = console.fontSize * 1.2f
     )
 
 }
 
 private fun convertStringToAnnotatedString(item: LineTextAndColor, index: Int): AnnotatedString {
 
+
     val s = item.pairList.size
 
     //lateinit var x : AnnotatedString
     var x = buildAnnotatedString {
-        withStyle(style = SpanStyle(color = Color.Blue, background = Color.White)) {
-            append("$index")
+        withStyle(style = SpanStyle(color = Color.Gray)) {
+            append("${index}>")
         }
     }
 
@@ -53,18 +58,30 @@ private fun convertStringToAnnotatedString(item: LineTextAndColor, index: Int): 
         x += buildAnnotatedString {
             withStyle(
                 style = SpanStyle(
+//item.pairList[i].colorText
+                    color = if (!item.pairList[i].flash)
+                        item.pairList[i].colorText
+                    else
+                        if (update.value)
+                            item.pairList[i].colorText
+                        else
+                            Color(0xFF090909),
+                    //item.pairList[i].colorBg,
 
-                    color = item.pairList[i].colorText,
-                    background = item.pairList[i].colorBg,
-                    fontFamily = FontFamily(Font(R.font.jetbrains)),
+                    background = if (!item.pairList[i].flash)
+                        item.pairList[i].colorBg
+                    else
+                        if (update.value)
+                            item.pairList[i].colorBg
+                        else Color(0xFF090909),
+                fontFamily = FontFamily(Font(R.font.jetbrains)),
 
-                    textDecoration = if (item.pairList[i].underline) TextDecoration.Underline else null,
-                    fontWeight = if (item.pairList[i].bold) FontWeight.Bold else null,
-                    fontStyle = if (item.pairList[i].italic) FontStyle.Italic else null,
+                textDecoration = if (item.pairList[i].underline) TextDecoration.Underline else null,
+                fontWeight = if (item.pairList[i].bold) FontWeight.Bold else null,
+                fontStyle = if (item.pairList[i].italic) FontStyle.Italic else null,
 
-                    fontSize = console_text.sp,
-                )
-            )
+                fontSize = console_text.sp,
+            ))
             { append(item.pairList[i].text) }
         }
 
