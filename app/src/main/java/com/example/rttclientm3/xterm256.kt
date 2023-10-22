@@ -1,5 +1,6 @@
 package com.example.rttclientm3
 
+import androidx.compose.runtime.currentComposer
 import androidx.compose.ui.graphics.Color
 import com.example.rttclientm3.screen.lazy.PairTextAndColor
 import timber.log.Timber
@@ -24,8 +25,9 @@ data class CurrentColor(
     var underline: Boolean = false,
     var flash: Boolean = false   //Мигание
 )
-val сurrentColor = CurrentColor()
-val symbolColor  = CurrentColor()
+var сurrentColor = CurrentColor()
+var symbolColor  = CurrentColor()
+var tempColor  = CurrentColor()
 
 //Json цвета в палитру allColor
 fun colorJsonToList() {
@@ -120,6 +122,10 @@ fun calculateColorInEscString(str: String) {
     val rederxTextColor = """38;05;([^;]+)""".toRegex()
     val rederxBgColor = """48;05;([^;]+)""".toRegex()
 
+    //Для символов
+    val rederxSymbolTextColor = """39;05;([^;]+)""".toRegex()
+    val rederxSymbolBgColor = """49;05;([^;]+)""".toRegex()
+
     if (str == "0") {
         сurrentColor.color = defaultTextColor
         сurrentColor.bgColor = defaultBgColor
@@ -133,6 +139,14 @@ fun calculateColorInEscString(str: String) {
     if (str == "1") {
         console._messages.value.clear()// removeRange(0, colorline_and_text.lastIndex)
         console.consoleAdd(" ")
+        return
+    }
+
+    //Очистка для символов ESC[2m
+    if (str == "2") {
+        сurrentColor.color = tempColor.color
+        сurrentColor.bgColor = tempColor.bgColor
+        сurrentColor.bold = tempColor.bold
         return
     }
 
@@ -183,4 +197,44 @@ fun calculateColorInEscString(str: String) {
 
     //MARK: Flash
     if (str1.indexOf("08") != -1) сurrentColor.flash = true
+
+
+
+    var str2 = str
+    //Цвет текста для символов
+    try {
+        matchResult = rederxSymbolTextColor.find(str)
+        if (matchResult != null) {
+            val color = colorIn256(matchResult.groupValues[1].toInt()) //Получили цвет по коду
+            tempColor.color = сurrentColor.color
+            сurrentColor.color = color
+            //println("--->calculateColorInString->codeColor:${color}")
+            str2 = str.replace(matchResult.value, "")
+        }
+    } catch (e: Exception) {
+        Timber.e("Ошибка блока 1")
+    }
+
+    try {
+        //Цвет Фона
+        matchResult = rederxSymbolBgColor.find(str2)
+        if (matchResult != null) {
+            val color = colorIn256(matchResult.groupValues[1].toInt()) //Получили цвет по коду
+            tempColor.bgColor = сurrentColor.bgColor
+            сurrentColor.bgColor = color
+            //println("--->calculateColorInString->currentBgColor:${color}")
+            str2 = str2.replace(matchResult.value, "")
+        }
+    } catch (e: Exception) {
+        Timber.tag("calculateColorInEsc").e("Ошибка блока 1")
+    }
+
+//    //MARK: Bold
+//    if (str2.indexOf("01") != -1)
+//    {
+//        tempColor.bold = сurrentColor.bold
+//        сurrentColor.bold = true
+//    }
+
+
 }

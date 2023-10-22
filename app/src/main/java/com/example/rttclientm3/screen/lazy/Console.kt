@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.font.GenericFontFamily
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import com.example.rttclientm3.R
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -111,7 +113,7 @@ class Console {
 
         recompose.collectAsState().value
 
-        //val update by remember { mutableStateOf(true) }  //для мигания
+        var update by remember { mutableStateOf(true) }  //для мигания
 
         val lazyListState: LazyListState = rememberLazyListState()
 
@@ -125,14 +127,14 @@ class Console {
         //}
 
 
-//        LaunchedEffect(key1 = messagesR) {
-//            while (true) {
-//                delay(700L)
-//                //update = !update
-//                recompose++
-//                //////////////////////telnetWarning.value = (telnetSlegenie.value == false) && (messages.size > lastCount)
-//            }
-//        }
+        LaunchedEffect(key1 = list) {
+            while (true) {
+                delay(700L)
+                update = !update
+                recompose.value++
+                //////////////////////telnetWarning.value = (telnetSlegenie.value == false) && (messages.size > lastCount)
+            }
+        }
 
 //        LaunchedEffect(key1 = lastVisibleItemIndex) {
 //            while (true) {
@@ -208,13 +210,14 @@ class Console {
                                 color = if (!item.pairList[i].flash)
                                     item.pairList[i].colorText
                                 else
-                                //if (update) item.pairList[i].colorText else Color(0xFF090909)
-                                    Color(0xFF090909),
+                                if (update) item.pairList[i].colorText else Color(0xFF090909)
+                                    //Color(0xFF090909)
+                                ,
                                 modifier = Modifier
                                     .background(
                                         if (!item.pairList[i].flash) item.pairList[i].colorBg else
-                                        //if (update) item.pairList[i].colorBg else Color(0xFF090909)
-                                            Color(0xFF090909)
+                                        if (update) item.pairList[i].colorBg else Color(0xFF090909)
+                                           // Color(0xFF090909)
                                     ),
                                 textDecoration = if (item.pairList[i].underline) TextDecoration.Underline else null,
                                 fontWeight = if (item.pairList[i].bold) FontWeight.Bold else null,
@@ -238,20 +241,20 @@ class Console {
 
     }
 
-    fun consoleAdd(text: String, color: Color = Color.Green, bgColor: Color = Color.Black) {
+    fun consoleAdd(text: String, color: Color = Color.Green, bgColor: Color = Color.Black, flash : Boolean = false) {
         if ((_messages.value.size > 0) && (_messages.value.last().text == " ")) {
             _messages.value.removeAt(_messages.value.lastIndex)
             _messages.value.add(
                 LineTextAndColor(
                     text,
-                    listOf(PairTextAndColor(text = text, color, bgColor))
+                    listOf(PairTextAndColor(text = text, color, bgColor, flash = flash))
                 )
             )
         } else {
             _messages.value.add(
                 LineTextAndColor(
                     text,
-                    listOf(PairTextAndColor(text = text, color, bgColor))
+                    listOf(PairTextAndColor(text = text, color, bgColor, flash = flash))
                 )
             )
         }

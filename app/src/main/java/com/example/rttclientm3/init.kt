@@ -133,7 +133,9 @@ class Initialization(private val context: Context) {
                 )
             )
 
-            console.consoleAdd("") //Пустая строка
+            console.consoleAdd("▁", flash = true)
+
+            //console.consoleAdd("") //Пустая строка
 
             ipBroadcast = ipToBroadCast(readLocalIP(context))
 

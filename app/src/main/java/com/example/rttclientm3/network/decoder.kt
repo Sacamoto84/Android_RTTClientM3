@@ -39,7 +39,7 @@ class NetCommandDecoder(
             var string =
                 channelIn.receive() //Получить строку с канала, может содежать несколько строк
 
-             string = string.replace("\r", "\u001B[01;38;05;0;48;05;10mCR\u001B[0m")
+             string = string.replace("\r", "\u001B[01;39;05;0;49;05;10mCR\u001B[2m")
 
             //Timber.e( "in>>>${string.length} "+string )
 
@@ -58,7 +58,7 @@ class NetCommandDecoder(
                     val stringDoN = bigStr.substring(0, indexN)
                     bigStr.delete(0, bigStr.indexOf('\n') + 1)
 
-                    lastString += "$stringDoN\u001B[01;38;05;15;48;05;27mLF\u001B[0m"
+                    lastString += "$stringDoN\u001B[01;39;05;15;49;05;27mLF\u001B[2m"
                     channelRoute.send(lastString)
                     channelOutNetCommand.send(NetCommand(lastString, true))
                     //Timber.i( "out>>>${lastString.length} "+lastString )

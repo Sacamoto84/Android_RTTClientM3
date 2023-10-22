@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,14 +17,10 @@ import libs.modifier.recomposeHighlighter
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ScreenLazy(navController: NavHostController) {
-
-    Column(Modifier.fillMaxSize()) {
-        Box(Modifier.fillMaxSize().weight(1f))
-        {
-            console.lazy (Modifier.padding(4.dp).recomposeHighlighter())
+    Scaffold(bottomBar = { BottomNavigationLazy(navController) }) {
+        Box(Modifier.fillMaxSize().padding(bottom = it.calculateBottomPadding())) {
+            console.lazy( Modifier.padding(4.dp).recomposeHighlighter())
             Warning()
         }
-        BottomNavigationLazy(navController)
     }
-
 }

@@ -63,7 +63,7 @@ class VM : ViewModel() {
                 //Отображение курсора, без записи в массив
                 var mod: PairTextAndColor? = null
                 if ((isCheckedUseLiteralEnter) && ((!s.newString)))
-                    mod = PairTextAndColor("▁", Color.Green, Color.Black, true)
+                    mod = PairTextAndColor("▁", Color.Green, Color.Black, true, flash = true)
 
                     //s.cmd += '▁'//'⤵'▮ ▯ ▎
 
@@ -74,7 +74,7 @@ class VM : ViewModel() {
 
                 //Если новая строка
                 if (s.newString)
-                    console.consoleAdd("▁")
+                    console.consoleAdd("▁", flash = true)
 
                 console.recompose() //Для ручной композиции списка
             }
